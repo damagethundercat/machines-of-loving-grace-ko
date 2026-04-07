@@ -570,7 +570,8 @@ body.is-cover-active .contents-panel {
 }
 
 .cover-panel,
-.cover-suits {
+.cover-suits,
+.cover-structure {
   position: absolute;
   display: block;
   user-select: none;
@@ -581,6 +582,7 @@ body.is-cover-active .contents-panel {
 .cover-panel {
   overflow: hidden;
   background: transparent;
+  z-index: 1;
 }
 
 .cover-panel-image {
@@ -611,12 +613,16 @@ body.is-cover-active .contents-panel {
   aspect-ratio: 637 / 1333;
 }
 
+.cover-structure {
+  display: none;
+}
+
 .cover-suits {
   left: 10.6%;
   top: 52.4%;
   width: 36.6%;
   filter: drop-shadow(0 2px 2px rgba(26, 26, 26, 0.24));
-  z-index: 2;
+  z-index: 3;
 }
 
 .cover-meta {
@@ -773,17 +779,27 @@ body.is-cover-active .contents-panel {
     padding: 0 18px;
   }
 
+  .reader-column {
+    display: block;
+  }
+
   .contents {
     display: none;
   }
 
   .reader-progress-shell {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     padding:
       8px
       max(12px, env(safe-area-inset-right))
       calc(16px + env(safe-area-inset-bottom))
       max(12px, env(safe-area-inset-left));
+    pointer-events: none;
+    z-index: 7;
   }
 
   .type-scale-controls {
@@ -845,6 +861,7 @@ body.is-cover-active .contents-panel {
   }
 
   .reader-progress-wrap {
+    pointer-events: auto;
     width: min(100%, 520px);
     padding-top: 28px;
   }
@@ -883,9 +900,18 @@ body.is-cover-active .contents-panel {
     width: 23%;
   }
 
+  .cover-structure {
+    display: block;
+    left: -10%;
+    top: 44%;
+    width: 46%;
+    opacity: 0.8;
+    z-index: 2;
+  }
+
   .cover-suits {
-    left: 2.8%;
-    top: 56.6%;
+    left: 4.2%;
+    top: 63.4%;
     width: 33%;
   }
 
@@ -897,14 +923,7 @@ body.is-cover-active .contents-panel {
   }
 
   .app-shell::before {
-    content: "";
-    left: clamp(-140px, -18vw, -78px);
-    bottom: clamp(82px, 10vh, 160px);
-    width: min(62vw, 420px);
-  }
-
-  body.is-cover-active .app-shell::before {
-    opacity: 0.7;
+    content: none;
   }
 }
 
@@ -936,22 +955,29 @@ body.is-cover-active .contents-panel {
 
   .cover-panel--main {
     left: 0;
-    width: 69%;
+    width: 69.8%;
   }
 
   .cover-panel--top {
-    width: 24%;
+    width: 24.4%;
   }
 
   .cover-panel--right {
     top: 35.2%;
-    width: 20.6%;
+    width: 24.4%;
+  }
+
+  .cover-structure {
+    left: -2%;
+    top: 47%;
+    width: 56%;
+    opacity: 0.84;
   }
 
   .cover-suits {
-    left: 3%;
-    top: 58.6%;
-    width: 31%;
+    left: 5.2%;
+    top: 66.8%;
+    width: 33.6%;
   }
 
   .cover-meta {
@@ -988,9 +1014,7 @@ body.is-cover-active .contents-panel {
   }
 
   .app-shell::before {
-    left: clamp(-122px, -26vw, -68px);
-    bottom: clamp(96px, 13vh, 170px);
-    width: min(68vw, 360px);
+    content: none;
   }
 
   .note-preview {
@@ -1049,22 +1073,29 @@ body.is-cover-active .contents-panel {
   }
 
   .cover-panel--main {
-    width: 69%;
+    width: 70.6%;
   }
 
   .cover-panel--top {
-    width: 24.5%;
+    width: 25.2%;
   }
 
   .cover-panel--right {
     top: 35.4%;
-    width: 21%;
+    width: 25.2%;
+  }
+
+  .cover-structure {
+    left: 0.2%;
+    top: 48.4%;
+    width: 59%;
+    opacity: 0.86;
   }
 
   .cover-suits {
-    left: 3.4%;
-    top: 59.8%;
-    width: 33%;
+    left: 5.8%;
+    top: 68.2%;
+    width: 35%;
   }
 
   .cover-meta {
@@ -1088,9 +1119,7 @@ body.is-cover-active .contents-panel {
   }
 
   .app-shell::before {
-    left: clamp(-116px, -34vw, -58px);
-    bottom: clamp(114px, 16vh, 188px);
-    width: min(74vw, 330px);
+    content: none;
   }
 
   .note-preview {

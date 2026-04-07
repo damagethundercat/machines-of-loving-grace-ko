@@ -1160,13 +1160,18 @@ function renderCoverPage() {
     "cover-panel cover-panel--right",
     "./assets/cover-a5.png",
   );
+  const structure = document.createElement("img");
+  structure.className = "cover-structure";
+  structure.src = "./assets/cover-a1.png";
+  structure.alt = "";
+  structure.setAttribute("aria-hidden", "true");
   const suits = document.createElement("img");
   suits.className = "cover-suits";
   suits.src = "./assets/cover-a2.png";
   suits.alt = "";
   suits.setAttribute("aria-hidden", "true");
 
-  art.append(mainPanel, topPanel, rightPanel, suits);
+  art.append(mainPanel, topPanel, rightPanel, structure, suits);
 
   const meta = document.createElement("div");
   meta.className = "cover-meta";
