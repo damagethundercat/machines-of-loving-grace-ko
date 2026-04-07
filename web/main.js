@@ -500,29 +500,34 @@ function computeMetrics() {
   const readerHeight = reader.clientHeight || window.innerHeight;
   const typeScale = getTypeScaleMultiplier();
   const isPhone = readerWidth < 480;
-  const shellPaddingY = readerWidth < 720 ? (isPhone ? 8 : 10) : 18;
-  const pagePaddingY = isPhone ? 28 : readerWidth < 720 ? 40 : 64;
-  const columnInset = isPhone ? 108 : 32;
-  const columnWidth = Math.min(readerWidth - columnInset, readerWidth < 980 ? 680 : 760);
+  const isCompact = readerWidth < 720;
+  const shellPaddingY = isCompact ? (isPhone ? 8 : 10) : 18;
+  const pagePaddingY = isPhone ? 28 : isCompact ? 40 : 64;
+  const columnInset = isPhone ? 26 : isCompact ? 42 : 32;
+  const mobileSafetyInset = isPhone ? 8 : isCompact ? 4 : 0;
+  const columnWidth = Math.min(
+    readerWidth - columnInset,
+    isCompact ? readerWidth - columnInset : readerWidth < 980 ? 680 : 760,
+  ) - mobileSafetyInset;
   const bodyFontSize = Math.round(
-    (isPhone ? 16 : readerWidth < 720 ? 18 : readerWidth < 1200 ? 21 : 23) * typeScale,
+    (isPhone ? 16 : isCompact ? 18 : readerWidth < 1200 ? 21 : 23) * typeScale,
   );
   const bodyLineHeight = Math.round(bodyFontSize * 1.82);
   const sectionFontSize = Math.round(
-    (isPhone ? 23 : readerWidth < 720 ? 26 : readerWidth < 1200 ? 31 : 34) * typeScale,
+    (isPhone ? 23 : isCompact ? 26 : readerWidth < 1200 ? 31 : 34) * typeScale,
   );
   const sectionLineHeight = Math.round(sectionFontSize * 1.35);
   const endnoteFontSize = Math.round(
-    (isPhone ? 13 : readerWidth < 720 ? 15 : 18) * typeScale,
+    (isPhone ? 13 : isCompact ? 15 : 18) * typeScale,
   );
   const endnoteLineHeight = Math.round(endnoteFontSize * 1.68);
-  const coverTitleSize = isPhone ? 21 : readerWidth < 720 ? 24 : 30;
-  const coverMetaSize = isPhone ? 12 : readerWidth < 720 ? 13 : 15;
+  const coverTitleSize = isPhone ? 21 : isCompact ? 24 : 30;
+  const coverMetaSize = isPhone ? 12 : isCompact ? 13 : 15;
 
   return {
-    pageWidth: Math.max(isPhone ? 240 : 280, columnWidth),
+    pageWidth: Math.max(isPhone ? 284 : 280, columnWidth),
     pagePaddingY,
-    contentWidth: Math.max(240, columnWidth),
+    contentWidth: Math.max(isPhone ? 284 : 240, columnWidth),
     contentHeight: Math.max(240, readerHeight - shellPaddingY * 2 - pagePaddingY * 2),
     bodyFontSize,
     bodyLineHeight,
@@ -1300,12 +1305,33 @@ function shouldUseInlineNotePreview() {
   return window.innerWidth > 1000;
 }
 
+function shouldUseMobileNoteSheet() {
+  return window.innerWidth <= 1000;
+}
+
 function tryToggleInlineNotePin(anchor, event) {
-  if (!shouldUseInlineNotePreview() || !notePreview) {
+  if (!notePreview) {
     return false;
   }
   const noteNumber = Number(anchor.dataset.noteNumber);
   if (!Number.isFinite(noteNumber) || !hasInlineNotePreviewContent(noteNumber)) {
+    return false;
+  }
+
+  if (shouldUseMobileNoteSheet()) {
+    event.preventDefault();
+    clearNotePreviewHideTimer();
+
+    if (state.activeNoteNumber === noteNumber && !notePreview.hidden) {
+      closeNotePreview();
+      return true;
+    }
+
+    openNotePreview(noteNumber, anchor, { pinned: true, mobileSheet: true });
+    return true;
+  }
+
+  if (!shouldUseInlineNotePreview()) {
     return false;
   }
 
@@ -1331,12 +1357,15 @@ function openNotePreview(noteNumber, anchor, options = {}) {
     return;
   }
   const pinned = options.pinned === true;
+  const useMobileSheet = options.mobileSheet === true || shouldUseMobileNoteSheet();
 
   notePreview.innerHTML = "";
   notePreview.classList.remove("note-preview--poem");
   notePreview.classList.remove("note-preview--cover");
+  notePreview.classList.remove("note-preview--sheet");
   notePreview.classList.toggle("note-preview--poem", previewData.kind === "poem");
-  notePreview.classList.toggle("note-preview--cover", state.currentPage === 0);
+  notePreview.classList.toggle("note-preview--cover", state.currentPage === 0 && !useMobileSheet);
+  notePreview.classList.toggle("note-preview--sheet", useMobileSheet);
   renderNotePreviewBody(notePreview, previewData, noteNumber);
   notePreview.hidden = false;
   notePreview.classList.add("is-active");
@@ -1344,6 +1373,12 @@ function openNotePreview(noteNumber, anchor, options = {}) {
   state.activeNoteNumber = noteNumber;
   state.pinnedNoteNumber = pinned ? noteNumber : null;
   updateActiveNoteRefs();
+
+  if (useMobileSheet) {
+    notePreview.style.removeProperty("--note-preview-top");
+    return;
+  }
+
   placeNotePreview(anchor);
 }
 
@@ -1388,8 +1423,10 @@ function closeNotePreview() {
   notePreview.classList.remove("is-pinned");
   notePreview.classList.remove("note-preview--poem");
   notePreview.classList.remove("note-preview--cover");
+  notePreview.classList.remove("note-preview--sheet");
   notePreview.hidden = true;
   notePreview.innerHTML = "";
+  notePreview.style.removeProperty("--note-preview-top");
   state.activeNoteNumber = null;
   state.pinnedNoteNumber = null;
   updateActiveNoteRefs();
