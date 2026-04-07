@@ -49,6 +49,14 @@ GitHub 공식 문서:
 
 - https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
 
+## 권리와 이용
+
+이 저장소에는 별도의 오픈소스 라이선스 파일을 포함하지 않습니다.
+
+- 원문 에세이의 이용 조건은 원 저작권자 기준으로 별도 확인이 필요합니다.
+- 번역문, 편집 산출물, 표지 및 웹 자산의 재사용 가능 여부도 별도 판단이 필요합니다.
+- 공개 저장소라고 해서 자동으로 자유 이용이 허용되는 것은 아닙니다.
+
 ## 첫 업로드 예시
 
 빈 GitHub 저장소를 만든 뒤 아래 순서로 연결하면 됩니다.
