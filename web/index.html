@@ -1,0 +1,119 @@
+﻿<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+    <title>사랑과 은총의 기계들</title>
+    <meta
+      name="description"
+      content="사랑과 은총의 기계들 웹 리더. 페이지형 판면과 차분한 e-ink 톤으로 읽기 경험에 집중합니다."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="contents" aria-label="본문 목차">
+        <div class="contents-inner">
+          <h2 class="contents-title">
+            <a
+              id="contents-home-link"
+              class="contents-home"
+              href="#p=1"
+              data-page-link="0"
+              aria-label="표지로 돌아가기"
+              title="표지로 돌아가기"
+            >
+              <span class="contents-symbol">♥</span>
+              <span class="contents-symbol">♣</span>
+              <span class="contents-symbol">♠</span>
+            </a>
+          </h2>
+          <nav id="contents-panel" class="contents-panel"></nav>
+        </div>
+      </aside>
+
+      <div class="reader-column">
+        <main
+          id="reader"
+          class="reader"
+          aria-label="사랑과 은총의 기계들 웹 리더"
+        >
+          <div id="page-track" class="page-track"></div>
+        </main>
+
+        <aside
+          id="note-preview"
+          class="note-preview"
+          aria-live="polite"
+          aria-label="선택한 미주"
+          hidden
+        ></aside>
+
+        <div class="reader-progress-shell">
+          <div class="reader-progress-wrap">
+            <p id="page-counter" class="page-counter" aria-live="polite" hidden></p>
+            <div
+              id="type-scale-controls"
+              class="type-scale-controls"
+              role="group"
+              aria-label="본문 글자 크기"
+            >
+              <button
+                type="button"
+                class="type-scale-button"
+                data-type-scale="small"
+                aria-pressed="false"
+              >
+                작게
+              </button>
+              <button
+                type="button"
+                class="type-scale-button"
+                data-type-scale="medium"
+                aria-pressed="true"
+              >
+                보통
+              </button>
+              <button
+                type="button"
+                class="type-scale-button"
+                data-type-scale="large"
+                aria-pressed="false"
+              >
+                크게
+              </button>
+            </div>
+            <input
+              id="page-slider"
+              class="reader-progress"
+              type="range"
+              min="1"
+              max="1"
+              value="1"
+              step="1"
+              aria-label="페이지 빠른 이동"
+              aria-controls="reader"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <noscript>
+      <p class="no-script">
+        이 웹 리더는 자바스크립트가 필요합니다.
+      </p>
+    </noscript>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
