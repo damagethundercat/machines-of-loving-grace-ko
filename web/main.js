@@ -1122,6 +1122,7 @@ function syncCoverResponsiveLayout() {
     coverPage.style.removeProperty("--cover-suits-top");
     coverPage.style.removeProperty("--cover-suits-width");
     coverPage.style.removeProperty("--cover-meta-margin-left");
+    coverPage.style.removeProperty("--cover-meta-margin-top");
     coverPage.style.removeProperty("--cover-meta-width");
   };
 
@@ -1149,11 +1150,15 @@ function syncCoverResponsiveLayout() {
   const mainWidth = Math.max(320, groupWidth - gap - sideWidth);
   const groupLeft = Math.max(0, artWidth - groupWidth);
   const mainHeight = mainWidth * COVER_MAIN_PANEL_RATIO;
-  const suitsWidth = mainWidth * (compactDesktop ? 0.5 : 0.48);
-  const suitsLeft = groupLeft + mainWidth * 0.12;
-  const suitsTop = Math.min(artHeight - suitsWidth * 0.18, mainHeight * (compactDesktop ? 0.61 : 0.63));
-  const metaWidth = Math.min(mainWidth * 0.58, compactDesktop ? 420 : 460);
-  const metaMarginLeft = groupLeft + mainWidth * 0.02;
+  const suitsWidth = mainWidth * (compactDesktop ? 0.39 : 0.43);
+  const suitsLeft = groupLeft + mainWidth * (compactDesktop ? 0.145 : 0.135);
+  const suitsTop = Math.min(
+    artHeight - suitsWidth * 0.08,
+    mainHeight * (compactDesktop ? 0.665 : 0.655),
+  );
+  const metaWidth = Math.min(mainWidth * (compactDesktop ? 0.52 : 0.56), compactDesktop ? 410 : 450);
+  const metaMarginLeft = groupLeft + mainWidth * (compactDesktop ? 0.085 : 0.055);
+  const metaMarginTop = compactDesktop ? 20 : 10;
 
   coverPage.style.setProperty("--cover-panel-group-width", `${Math.round(groupWidth)}px`);
   coverPage.style.setProperty("--cover-panel-gap", `${Math.round(gap)}px`);
@@ -1163,6 +1168,7 @@ function syncCoverResponsiveLayout() {
   coverPage.style.setProperty("--cover-suits-top", `${Math.round(suitsTop)}px`);
   coverPage.style.setProperty("--cover-suits-width", `${Math.round(suitsWidth)}px`);
   coverPage.style.setProperty("--cover-meta-margin-left", `${Math.round(metaMarginLeft)}px`);
+  coverPage.style.setProperty("--cover-meta-margin-top", `${Math.round(metaMarginTop)}px`);
   coverPage.style.setProperty("--cover-meta-width", `${Math.round(metaWidth)}px`);
 }
 

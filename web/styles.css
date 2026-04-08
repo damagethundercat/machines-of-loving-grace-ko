@@ -770,6 +770,7 @@ body.is-cover-active .contents-panel {
 .cover-meta {
   width: var(--cover-meta-width, min(39.2%, 32rem));
   margin-left: var(--cover-meta-margin-left, 19.4%);
+  margin-top: var(--cover-meta-margin-top, 0px);
   align-self: flex-start;
   position: relative;
   z-index: 5;
