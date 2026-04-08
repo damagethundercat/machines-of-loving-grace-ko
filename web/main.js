@@ -530,6 +530,15 @@ function computeMetrics() {
     readerWidth - columnInset,
     maxColumnWidth,
   ) - viewportSafetyInset;
+  const textLayoutSafetyInset = isPhone
+    ? 0
+    : isCompact
+      ? 0
+      : readerWidth < 1180
+        ? 10
+        : readerWidth < 1800
+          ? 12
+          : 18;
   const bodyFontSize = Math.round(
     (isPhone ? 16 : isCompact ? 18 : readerWidth < 1200 ? 21 : 23) * typeScale,
   );
@@ -548,7 +557,7 @@ function computeMetrics() {
   return {
     pageWidth: Math.max(isPhone ? 292 : 280, columnWidth),
     pagePaddingY,
-    contentWidth: Math.max(isPhone ? 292 : 240, columnWidth),
+    contentWidth: Math.max(isPhone ? 292 : 240, columnWidth - textLayoutSafetyInset),
     contentHeight: Math.max(
       220,
       readerHeight - shellPaddingY * 2 - pagePaddingY * 2 - bottomUiReserve,
