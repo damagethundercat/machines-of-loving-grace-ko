@@ -608,7 +608,7 @@ body.is-cover-active .contents-panel {
 }
 
 .page-shell--content .page {
-  margin-left: 0;
+  margin-left: clamp(18px, 1.8vw, 30px);
   margin-right: auto;
 }
 
