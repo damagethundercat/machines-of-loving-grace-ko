@@ -250,6 +250,10 @@ body.is-cover-active .contents-panel {
   scrollbar-color: rgba(26, 26, 26, 0.18) transparent;
 }
 
+.note-preview[hidden] {
+  display: none !important;
+}
+
 .note-preview.note-preview--poem {
   width: clamp(250px, 20vw, 330px);
 }
@@ -864,7 +868,7 @@ body.is-cover-active .contents-panel {
 
   .reader-progress-wrap {
     pointer-events: auto;
-    width: min(100%, 540px);
+    width: min(82%, 430px);
     padding-top: 26px;
   }
 
@@ -898,15 +902,15 @@ body.is-cover-active .contents-panel {
 
   .cover-panel--right {
     right: 0;
-    top: 34.8%;
+    top: 22.2%;
     width: 29.6%;
   }
 
   .cover-structure {
     display: block;
-    left: 9%;
-    top: 45%;
-    width: 52%;
+    left: -7%;
+    top: 48.4%;
+    width: 76%;
     opacity: 0.58;
     z-index: 2;
   }
@@ -969,14 +973,14 @@ body.is-cover-active .contents-panel {
   }
 
   .cover-panel--right {
-    top: 34.4%;
+    top: 23.4%;
     width: 26.8%;
   }
 
   .cover-structure {
-    left: 12%;
-    top: 50%;
-    width: 58%;
+    left: -10%;
+    top: 54%;
+    width: 88%;
     opacity: 0.6;
   }
 
@@ -998,8 +1002,8 @@ body.is-cover-active .contents-panel {
   }
 
   .reader-progress-wrap {
-    width: 100%;
-    max-width: 100%;
+    width: min(84%, 390px);
+    max-width: 390px;
     padding-top: 24px;
   }
 
@@ -1066,7 +1070,8 @@ body.is-cover-active .contents-panel {
   }
 
   .reader-progress-wrap {
-    width: 100%;
+    width: min(86%, 344px);
+    max-width: 344px;
     padding-top: 22px;
   }
 
@@ -1088,14 +1093,14 @@ body.is-cover-active .contents-panel {
   }
 
   .cover-panel--right {
-    top: 34.6%;
+    top: 24.4%;
     width: 27.8%;
   }
 
   .cover-structure {
-    left: 14.5%;
-    top: 52.5%;
-    width: 61%;
+    left: -14%;
+    top: 57%;
+    width: 104%;
     opacity: 0.62;
   }
 

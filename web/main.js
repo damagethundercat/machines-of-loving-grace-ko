@@ -503,6 +503,7 @@ function computeMetrics() {
   const isCompact = readerWidth < 720;
   const shellPaddingY = isCompact ? (isPhone ? 8 : 10) : 18;
   const pagePaddingY = isPhone ? 28 : isCompact ? 40 : 64;
+  const bottomUiReserve = isPhone ? 112 : isCompact ? 88 : 0;
   const columnInset = isPhone ? 16 : isCompact ? 28 : 32;
   const mobileSafetyInset = isPhone ? 36 : isCompact ? 14 : 0;
   const columnWidth = Math.min(
@@ -528,7 +529,10 @@ function computeMetrics() {
     pageWidth: Math.max(isPhone ? 292 : 280, columnWidth),
     pagePaddingY,
     contentWidth: Math.max(isPhone ? 292 : 240, columnWidth),
-    contentHeight: Math.max(240, readerHeight - shellPaddingY * 2 - pagePaddingY * 2),
+    contentHeight: Math.max(
+      220,
+      readerHeight - shellPaddingY * 2 - pagePaddingY * 2 - bottomUiReserve,
+    ),
     bodyFontSize,
     bodyLineHeight,
     sectionFontSize,
