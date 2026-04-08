@@ -1157,8 +1157,17 @@ function syncCoverResponsiveLayout() {
     mainHeight * (compactDesktop ? 0.665 : 0.655),
   );
   const metaWidth = Math.min(mainWidth * (compactDesktop ? 0.52 : 0.56), compactDesktop ? 410 : 450);
-  const metaMarginLeft = groupLeft;
-  const metaMarginTop = compactDesktop ? 36 : 20;
+  // 표지 타이틀/저자/부제/날짜 블록 위치 조정값:
+  // `groupLeft`는 "메인 하늘 패널이 시작되는 자동 기준점"입니다.
+  // 이 값 자체는 레이아웃 계산 결과라 화면에 따라 변화 폭이 작을 수 있습니다.
+  // 실제 미세 조정은 아래 `metaOffsetX`, `metaOffsetY`만 수정하시면 됩니다.
+  // `metaOffsetX` 값을 키우면 더 오른쪽으로 이동합니다.
+  // `metaOffsetY` 값을 키우면 더 아래로 내려갑니다.
+  const metaOffsetX = compactDesktop ? 24 : 12;
+  const metaOffsetY = compactDesktop ? 56 : 36;
+  const metaMarginLeft = groupLeft + metaOffsetX;
+  const metaMarginTop = metaOffsetY;
+
 
   coverPage.style.setProperty("--cover-panel-group-width", `${Math.round(groupWidth)}px`);
   coverPage.style.setProperty("--cover-panel-gap", `${Math.round(gap)}px`);
@@ -1638,6 +1647,7 @@ function placeNotePreview(anchor) {
   }
 
   const columnRect = column.getBoundingClientRect();
+  const readerRect = reader?.getBoundingClientRect() ?? columnRect;
   const anchorRect = anchor.getBoundingClientRect();
   notePreview.style.removeProperty("left");
   notePreview.style.removeProperty("right");
@@ -1647,7 +1657,8 @@ function placeNotePreview(anchor) {
     const coverArt = coverPage?.querySelector(".cover-art");
     if (coverArt instanceof HTMLElement) {
       const coverArtRect = coverArt.getBoundingClientRect();
-      const maxTop = Math.max(column.clientHeight - notePreview.offsetHeight - 40, 24);
+      const availableBottom = Math.max(readerRect.bottom - columnRect.top - 28, 24);
+      const maxTop = Math.max(availableBottom - notePreview.offsetHeight, 24);
       const top = clamp(
         coverArtRect.top - columnRect.top + Math.max(28, coverArtRect.height * 0.12),
         24,
@@ -1669,7 +1680,8 @@ function placeNotePreview(anchor) {
     const topPanel = coverPage?.querySelector(".cover-panel--top");
     if (topPanel instanceof HTMLElement) {
       const topPanelRect = topPanel.getBoundingClientRect();
-      const maxTop = Math.max(column.clientHeight - notePreview.offsetHeight - 40, 24);
+      const availableBottom = Math.max(readerRect.bottom - columnRect.top - 28, 24);
+      const maxTop = Math.max(availableBottom - notePreview.offsetHeight, 24);
       const coverTop = clamp(topPanelRect.bottom - columnRect.top + 18, 24, maxTop);
       notePreview.style.setProperty("--note-preview-top", `${Math.round(coverTop)}px`);
       notePreview.style.right = `max(28px, env(safe-area-inset-right))`;
@@ -1677,7 +1689,8 @@ function placeNotePreview(anchor) {
     }
   }
   const preferredTop = anchorRect.top - columnRect.top - 18;
-  const maxTop = Math.max(column.clientHeight - notePreview.offsetHeight - 40, 24);
+  const availableBottom = Math.max(readerRect.bottom - columnRect.top - 28, 24);
+  const maxTop = Math.max(availableBottom - notePreview.offsetHeight, 24);
   const top = clamp(preferredTop, 24, maxTop);
   notePreview.style.setProperty("--note-preview-top", `${Math.round(top)}px`);
   notePreview.style.right = `max(28px, env(safe-area-inset-right))`;
@@ -2018,7 +2031,6 @@ function showError(message) {
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
-
 
 
 
