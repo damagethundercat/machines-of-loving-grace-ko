@@ -1494,28 +1494,10 @@ function isTouchLikeViewport() {
 
 function hasComfortableCoverStructurePreviewSpace() {
   const readerWidth = reader?.clientWidth || window.innerWidth;
-  const readerHeight = reader?.clientHeight || window.innerHeight;
-  const aspectRatio = readerWidth / Math.max(readerHeight, 1);
-  const coverPage = pageTrack?.querySelector(".page--cover");
-  const coverArt = coverPage?.querySelector(".cover-art");
-  const panelGroup = coverPage?.querySelector(".cover-panel-group");
-  let leftStructureLane = 0;
-
-  if (coverArt instanceof HTMLElement && panelGroup instanceof HTMLElement) {
-    const artRect = coverArt.getBoundingClientRect();
-    const groupRect = panelGroup.getBoundingClientRect();
-    leftStructureLane = Math.max(0, groupRect.left - artRect.left);
-  }
-
-  // 맥북처럼 실제 읽기 영역 높이가 조금 낮은 데스크톱에서도
-  // 표지 1번 각주는 왼쪽 구조물 위로 띄울 수 있게 기준을 완화합니다.
-  // 대신 초광폭/심하게 납작한 화면에서는 기존처럼 일반 노트로 남깁니다.
-  return (
-    readerWidth >= 1280 &&
-    readerHeight >= 640 &&
-    aspectRatio <= 2.15 &&
-    leftStructureLane >= 220
-  );
+  // 표지 첫 페이지 1번 각주는 맥/일반 데스크톱에서 안정적으로
+  // 왼쪽 구조물 위에 띄우기 위해 폭 기준만 단순하게 사용합니다.
+  // 너무 좁은 화면(태블릿/모바일)은 기존 시트/노트 흐름으로 남깁니다.
+  return readerWidth >= 1240;
 }
 
 function shouldUseCoverStructureNotePreview(noteNumber) {
@@ -2048,6 +2030,5 @@ function showError(message) {
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
-
 
 
