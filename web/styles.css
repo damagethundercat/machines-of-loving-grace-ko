@@ -273,38 +273,44 @@ body.is-cover-active .contents-panel {
 }
 
 .note-preview.note-preview--cover-left {
-  width: clamp(250px, 18vw, 320px);
-  padding: 10px 18px 12px 0;
+  width: clamp(320px, 24vw, 430px);
+  max-height: none;
+  overflow: visible;
+  padding: 12px 28px 16px 0;
   background: transparent;
+  scrollbar-width: none;
 }
 
 .note-preview.note-preview--cover-left::before {
-  right: 0;
-  left: auto;
+  display: none;
+}
+
+.note-preview.note-preview--cover-left::-webkit-scrollbar {
+  display: none;
 }
 
 .note-preview.note-preview--cover-left::after {
   content: "";
   position: absolute;
-  inset: -22px -18px -24px -26px;
-  border-radius: 34px;
+  inset: -34px -44px -40px -38px;
+  border-radius: 52px;
   background:
     radial-gradient(
-      82% 62% at 18% 12%,
+      88% 64% at 18% 10%,
       rgba(245, 245, 245, 0.98) 0%,
-      rgba(245, 245, 245, 0.82) 44%,
-      rgba(245, 245, 245, 0.42) 68%,
+      rgba(245, 245, 245, 0.86) 46%,
+      rgba(245, 245, 245, 0.46) 70%,
       rgba(245, 245, 245, 0) 100%
     ),
     linear-gradient(
       270deg,
       rgba(245, 245, 245, 0) 0%,
-      rgba(245, 245, 245, 0.54) 22%,
-      rgba(245, 245, 245, 0.9) 42%,
+      rgba(245, 245, 245, 0.42) 24%,
+      rgba(245, 245, 245, 0.82) 46%,
       rgba(245, 245, 245, 0.985) 100%
     );
-  filter: blur(12px);
-  opacity: 0.96;
+  filter: blur(18px);
+  opacity: 0.98;
   pointer-events: none;
   z-index: -1;
 }
