@@ -604,12 +604,12 @@ body.is-cover-active .contents-panel {
 }
 
 .page-shell--content {
-  justify-items: start;
+  justify-items: center;
 }
 
 .page-shell--content .page {
-  margin-left: clamp(18px, 1.8vw, 30px);
-  margin-right: auto;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .page {
@@ -758,6 +758,15 @@ body.is-cover-active .contents-panel {
     grid-template-columns: minmax(160px, 208px) minmax(0, 1fr);
     gap: clamp(20px, 2.2vw, 34px);
     padding: 0 clamp(18px, 2.2vw, 32px);
+  }
+
+  .page-shell--content {
+    justify-items: start;
+  }
+
+  .page-shell--content .page {
+    margin-left: clamp(80px, 8.8vw, 160px);
+    margin-right: auto;
   }
 
   .contents-inner {
