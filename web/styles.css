@@ -608,7 +608,7 @@ body.is-cover-active .contents-panel {
 }
 
 .page-shell--content .page {
-  margin-left: clamp(28px, 4.8vw, 92px);
+  margin-left: 0;
   margin-right: auto;
 }
 
@@ -753,7 +753,7 @@ body.is-cover-active .contents-panel {
   color: var(--ink-soft);
 }
 
-@media (max-width: 1400px) and (min-width: 1101px) {
+@media (max-width: 1800px) and (min-width: 1101px) {
   .app-shell {
     grid-template-columns: minmax(160px, 208px) minmax(0, 1fr);
     gap: clamp(20px, 2.2vw, 34px);
