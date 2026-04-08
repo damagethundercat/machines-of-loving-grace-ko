@@ -505,11 +505,28 @@ function computeMetrics() {
   const pagePaddingY = isPhone ? 28 : isCompact ? 40 : 64;
   const bottomUiReserve = isPhone ? 112 : isCompact ? 88 : 0;
   const columnInset = isPhone ? 16 : isCompact ? 28 : 32;
-  const mobileSafetyInset = isPhone ? 36 : isCompact ? 14 : 0;
+  const viewportSafetyInset = isPhone
+    ? 36
+    : isCompact
+      ? 14
+      : readerWidth < 1180
+        ? 18
+        : readerWidth < 1400
+          ? 10
+          : 0;
+  const maxColumnWidth = isCompact
+    ? readerWidth - columnInset
+    : readerWidth < 1180
+      ? 680
+      : readerWidth < 1400
+        ? 720
+        : readerWidth < 1700
+          ? 748
+          : 760;
   const columnWidth = Math.min(
     readerWidth - columnInset,
-    isCompact ? readerWidth - columnInset : readerWidth < 980 ? 680 : 760,
-  ) - mobileSafetyInset;
+    maxColumnWidth,
+  ) - viewportSafetyInset;
   const bodyFontSize = Math.round(
     (isPhone ? 16 : isCompact ? 18 : readerWidth < 1200 ? 21 : 23) * typeScale,
   );
@@ -1325,9 +1342,12 @@ function shouldUseInlineNotePreview() {
   const readerWidth = reader?.clientWidth || window.innerWidth;
   const pageWidth = state.metrics?.pageWidth ?? Math.min(readerWidth, 760);
   const availableSideRoom = Math.max(0, readerWidth - pageWidth);
-  const inlineNoteWidth = clamp(window.innerWidth * 0.18, 220, 288);
+  const inlineNoteWidth =
+    window.innerWidth < 1400
+      ? clamp(window.innerWidth * 0.145, 200, 248)
+      : clamp(window.innerWidth * 0.18, 220, 288);
 
-  return availableSideRoom >= inlineNoteWidth + 72;
+  return availableSideRoom >= inlineNoteWidth + 48;
 }
 
 function shouldUseMobileNoteSheet() {

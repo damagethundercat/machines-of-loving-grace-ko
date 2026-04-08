@@ -743,6 +743,39 @@ body.is-cover-active .contents-panel {
   color: var(--ink-soft);
 }
 
+@media (max-width: 1400px) and (min-width: 1101px) {
+  .app-shell {
+    grid-template-columns: minmax(160px, 208px) minmax(0, 1fr);
+    gap: clamp(20px, 2.2vw, 34px);
+    padding: 0 clamp(18px, 2.2vw, 32px);
+  }
+
+  .contents-inner {
+    gap: 1.45rem;
+    padding: 64px 0 48px;
+  }
+
+  .contents-title {
+    font-size: 2.5rem;
+  }
+
+  .contents-link {
+    font-size: 1.04rem;
+  }
+
+  .note-preview {
+    width: clamp(200px, 16vw, 248px);
+  }
+
+  .note-preview.note-preview--poem {
+    width: clamp(220px, 17vw, 290px);
+  }
+
+  .note-preview.note-preview--cover {
+    width: clamp(220px, 17vw, 278px);
+  }
+}
+
 .segment--section {
   font-size: var(--section-font-size);
   line-height: var(--section-line-height);
