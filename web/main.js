@@ -517,11 +517,11 @@ function computeMetrics() {
   const maxColumnWidth = isCompact
     ? readerWidth - columnInset
     : readerWidth < 1180
-      ? 680
+      ? 664
       : readerWidth < 1400
-        ? 720
+        ? 700
         : readerWidth < 1700
-          ? 748
+          ? 736
           : 760;
   const columnWidth = Math.min(
     readerWidth - columnInset,
@@ -1341,13 +1341,13 @@ function shouldUseInlineNotePreview() {
 
   const readerWidth = reader?.clientWidth || window.innerWidth;
   const pageWidth = state.metrics?.pageWidth ?? Math.min(readerWidth, 760);
-  const availableSideRoom = Math.max(0, readerWidth - pageWidth);
+  const sideGutter = Math.max(0, (readerWidth - pageWidth) / 2);
   const inlineNoteWidth =
     window.innerWidth < 1400
       ? clamp(window.innerWidth * 0.145, 200, 248)
       : clamp(window.innerWidth * 0.18, 220, 288);
 
-  return availableSideRoom >= inlineNoteWidth + 48;
+  return sideGutter >= inlineNoteWidth + 28;
 }
 
 function shouldUseMobileNoteSheet() {
