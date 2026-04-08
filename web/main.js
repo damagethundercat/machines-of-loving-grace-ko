@@ -507,7 +507,15 @@ function computeMetrics() {
   const isCompact = readerWidth < 720;
   const shellPaddingY = isCompact ? (isPhone ? 8 : 10) : 18;
   const pagePaddingY = isPhone ? 28 : isCompact ? 40 : 64;
-  const bottomUiReserve = isPhone ? 112 : isCompact ? 88 : 0;
+  const bottomUiReserve = isPhone
+    ? 120
+    : isCompact
+      ? 96
+      : readerWidth < 1180
+        ? 92
+        : readerWidth < 1600
+          ? 76
+          : 64;
   const columnInset = isPhone ? 16 : isCompact ? 28 : 32;
   const viewportSafetyInset = isPhone
     ? 36
@@ -1386,8 +1394,21 @@ function isTouchLikeViewport() {
   );
 }
 
+function hasComfortableCoverStructurePreviewSpace() {
+  const readerWidth = reader?.clientWidth || window.innerWidth;
+  const readerHeight = reader?.clientHeight || window.innerHeight;
+  const aspectRatio = readerWidth / Math.max(readerHeight, 1);
+
+  return readerWidth >= 1280 && readerHeight >= 780 && aspectRatio <= 2;
+}
+
 function shouldUseCoverStructureNotePreview(noteNumber) {
-  return state.currentPage === 0 && noteNumber === 1 && !isTouchLikeViewport();
+  return (
+    state.currentPage === 0 &&
+    noteNumber === 1 &&
+    !isTouchLikeViewport() &&
+    hasComfortableCoverStructurePreviewSpace()
+  );
 }
 
 function shouldUseMobileNoteSheet() {

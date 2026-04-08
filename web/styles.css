@@ -484,14 +484,14 @@ body.is-cover-active .contents-panel {
   padding:
     4px
     max(18px, env(safe-area-inset-right))
-    calc(24px + env(safe-area-inset-bottom))
+    calc(30px + env(safe-area-inset-bottom))
     max(18px, env(safe-area-inset-left));
 }
 
 .reader-progress-wrap {
   position: relative;
   width: min(calc(var(--page-width) * 1.3), 100%);
-  padding-top: 34px;
+  padding-top: 38px;
 }
 
 .type-scale-controls {
@@ -776,6 +776,44 @@ body.is-cover-active .contents-panel {
   gap: 0.5rem;
   justify-items: start;
   text-align: left;
+}
+
+@media (max-width: 1520px) and (min-width: 1101px), (max-height: 920px) and (min-width: 1101px) {
+  .app-shell::before {
+    left: clamp(-290px, -16vw, -180px);
+    bottom: clamp(-188px, -18vh, -116px);
+    width: min(48vw, 860px);
+  }
+
+  .page--cover {
+    gap: 1.1rem;
+  }
+
+  .cover-art {
+    height: clamp(330px, 49vh, 560px);
+  }
+
+  .cover-panel-group {
+    width: min(78.5%, 960px);
+    gap: clamp(16px, 1.6vw, 22px);
+  }
+
+  .cover-side-stack {
+    flex: 0 0 clamp(214px, 24.4%, 296px);
+    gap: clamp(12px, 1.35vw, 18px);
+  }
+
+  .cover-suits {
+    left: 10.8%;
+    top: 53.8%;
+    width: 37.2%;
+  }
+
+  .cover-meta {
+    width: min(40.5%, 28rem);
+    margin-left: 20.8%;
+    gap: 0.44rem;
+  }
 }
 
 .cover-title {
