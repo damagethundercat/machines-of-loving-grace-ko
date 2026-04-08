@@ -1493,11 +1493,28 @@ function isTouchLikeViewport() {
 }
 
 function hasComfortableCoverStructurePreviewSpace() {
-  const readerWidth = reader?.clientWidth || window.innerWidth;
-  // 표지 첫 페이지 1번 각주는 맥/일반 데스크톱에서 안정적으로
-  // 왼쪽 구조물 위에 띄우기 위해 폭 기준만 단순하게 사용합니다.
-  // 너무 좁은 화면(태블릿/모바일)은 기존 시트/노트 흐름으로 남깁니다.
-  return readerWidth >= 1240;
+  const coverPage = pageTrack?.querySelector(".page--cover");
+  const coverArt = coverPage?.querySelector(".cover-art");
+  const panelGroup = coverPage?.querySelector(".cover-panel-group");
+  if (!(coverArt instanceof HTMLElement) || !(panelGroup instanceof HTMLElement)) {
+    return false;
+  }
+
+  const artRect = coverArt.getBoundingClientRect();
+  const groupRect = panelGroup.getBoundingClientRect();
+  const coverWidth = artRect.width;
+  const coverHeight = artRect.height;
+  const leftStructureLane = Math.max(0, groupRect.left - artRect.left);
+  const aspectRatio = coverWidth / Math.max(coverHeight, 1);
+
+  // 표지 1번 각주는 실제 "표지 아트 내부의 왼쪽 구조물 공간"이 충분한지를 기준으로 판단합니다.
+  // reader 폭은 좌측 목차/여백 영향으로 맥에서 과소평가되므로 사용하지 않습니다.
+  return (
+    coverWidth >= 860 &&
+    coverHeight >= 420 &&
+    aspectRatio <= 3.2 &&
+    leftStructureLane >= 180
+  );
 }
 
 function shouldUseCoverStructureNotePreview(noteNumber) {
@@ -2030,5 +2047,4 @@ function showError(message) {
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
-
 
