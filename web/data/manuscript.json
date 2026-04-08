@@ -2700,11 +2700,6 @@
       ]
     },
     {
-      "type": "asterism",
-      "id": "web-postscript-asterism-1",
-      "text": "♥ ♣ ♠"
-    },
-    {
       "type": "section",
       "id": "web-postscript-section",
       "text": "웹판 후주",
@@ -2714,6 +2709,11 @@
           "text": "웹판 후주"
         }
       ]
+    },
+    {
+      "type": "asterism",
+      "id": "web-postscript-asterism-1",
+      "text": "♥ ♣ ♠"
     },
     {
       "type": "paragraph",
