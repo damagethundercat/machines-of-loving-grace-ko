@@ -621,7 +621,7 @@ body.is-cover-active .contents-panel {
 }
 
 .page--cover {
-  width: min(calc(var(--page-width) * 1.76), 100%);
+  width: min(100%, clamp(1040px, 76vw, 1320px));
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -637,6 +637,12 @@ body.is-cover-active .contents-panel {
   overflow: visible;
 }
 
+.cover-panel-group,
+.cover-side-stack {
+  position: relative;
+  display: block;
+}
+
 .cover-panel,
 .cover-suits,
 .cover-structure {
@@ -647,7 +653,24 @@ body.is-cover-active .contents-panel {
   pointer-events: none;
 }
 
+.cover-panel-group {
+  width: min(81%, 1080px);
+  margin-left: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(18px, 1.8vw, 28px);
+  z-index: 1;
+}
+
+.cover-side-stack {
+  flex: 0 0 clamp(232px, 25.5%, 330px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.5vw, 24px);
+}
+
 .cover-panel {
+  position: relative;
   overflow: hidden;
   background: transparent;
   z-index: 1;
@@ -661,23 +684,24 @@ body.is-cover-active .contents-panel {
 }
 
 .cover-panel--main {
-  left: 3.8%;
-  top: 0;
-  width: 60.4%;
+  left: auto;
+  top: auto;
+  flex: 1 1 auto;
+  width: auto;
   aspect-ratio: 960 / 724;
 }
 
 .cover-panel--top {
-  right: 0;
-  top: 0;
-  width: 34%;
+  right: auto;
+  top: auto;
+  width: 100%;
   aspect-ratio: 635 / 294;
 }
 
 .cover-panel--right {
-  right: 0;
-  top: 36.8%;
-  width: 22.8%;
+  right: auto;
+  top: auto;
+  width: 100%;
   aspect-ratio: 637 / 1333;
 }
 
@@ -686,9 +710,9 @@ body.is-cover-active .contents-panel {
 }
 
 .cover-suits {
-  left: 10.6%;
-  top: 52.4%;
-  width: 36.6%;
+  left: 9.4%;
+  top: 51.4%;
+  width: 39.8%;
   filter: drop-shadow(0 2px 2px rgba(26, 26, 26, 0.24));
   z-index: 3;
 }
@@ -963,22 +987,46 @@ body.is-cover-active .contents-panel {
     height: clamp(320px, 46vh, 500px);
   }
 
+  .cover-panel-group {
+    width: 100%;
+    height: 100%;
+    margin-left: 0;
+    display: block;
+  }
+
+  .cover-side-stack {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 29.6%;
+    height: 100%;
+    display: block;
+  }
+
+  .cover-panel {
+    position: absolute;
+  }
+
   .cover-panel--main {
     left: 0;
+    top: 0;
     width: 63.6%;
+    flex: none;
   }
 
   .cover-panel--top {
-    width: 29.6%;
+    right: 0;
+    top: 0;
+    width: 100%;
   }
 
   /* Tablet/mobile cover tuning:
-     change `top` to move the right vertical panel up/down,
-     and `width` to resize that panel. */
+     change `.cover-side-stack` `width` to resize both right sky panels together.
+     change `.cover-panel--right` `top` to move the vertical panel up/down. */
   .cover-panel--right {
     right: 0;
     top: 22.2%;
-    width: 29.6%;
+    width: 100%;
   }
 
   /* Tablet/mobile cover tuning:
@@ -1043,19 +1091,20 @@ body.is-cover-active .contents-panel {
 
   .cover-panel--main {
     left: 0;
+    top: 0;
     width: 70.2%;
   }
 
-  .cover-panel--top {
+  .cover-side-stack {
     width: 26.8%;
   }
 
   /* Phone cover tuning:
-     change `top` to move the right vertical panel up/down,
-     and `width` to resize that panel. */
+     change `.cover-side-stack` `width` to resize both right sky panels together.
+     change `.cover-panel--right` `top` to move the vertical panel up/down. */
   .cover-panel--right {
     top: 23.4%;
-    width: 26.8%;
+    width: 100%;
   }
 
   /* Phone cover tuning:
@@ -1190,16 +1239,16 @@ body.is-cover-active .contents-panel {
     width: 71.2%;
   }
 
-  .cover-panel--top {
+  .cover-side-stack {
     width: 27.8%;
   }
 
   /* Narrow-phone cover tuning:
-     change `top` to move the right vertical panel up/down,
-     and `width` to resize that panel. */
+     change `.cover-side-stack` `width` to resize both right sky panels together.
+     change `.cover-panel--right` `top` to move the vertical panel up/down. */
   .cover-panel--right {
     top: 17.7%;
-    width: 27.8%;
+    width: 100%;
   }
 
   /* Narrow-phone cover tuning:
@@ -1274,9 +1323,13 @@ body.is-cover-active .contents-panel {
 @media (max-width: 480px) and (max-height: 700px) {
   /* Short-phone override, e.g. iPhone SE:
      use this block when the narrow-phone defaults feel too tall/loose. */
+  .cover-side-stack {
+    width: 27.8%;
+  }
+
   .cover-panel--right {
     top: 19.4%;
-    width: 27.8%;
+    width: 100%;
   }
 
   .cover-structure {

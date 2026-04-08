@@ -535,10 +535,10 @@ function computeMetrics() {
     : isCompact
       ? 0
       : readerWidth < 1180
-        ? 10
+        ? 8
         : readerWidth < 1800
-          ? 12
-          : 18;
+          ? 10
+          : 14;
   const bodyFontSize = Math.round(
     (isPhone ? 16 : isCompact ? 18 : readerWidth < 1200 ? 21 : 23) * typeScale,
   );
@@ -1206,7 +1206,15 @@ function renderCoverPage() {
   suits.alt = "";
   suits.setAttribute("aria-hidden", "true");
 
-  art.append(mainPanel, topPanel, rightPanel, structure, suits);
+  const panelGroup = document.createElement("div");
+  panelGroup.className = "cover-panel-group";
+
+  const sideStack = document.createElement("div");
+  sideStack.className = "cover-side-stack";
+  sideStack.append(topPanel, rightPanel);
+
+  panelGroup.append(mainPanel, sideStack, suits);
+  art.append(panelGroup, structure);
 
   const meta = document.createElement("div");
   meta.className = "cover-meta";
