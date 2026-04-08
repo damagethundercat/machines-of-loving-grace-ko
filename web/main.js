@@ -591,9 +591,9 @@ function computeMetrics() {
     maxColumnWidth,
   ) - viewportSafetyInset;
   const textLayoutSafetyInset = isPhone
-    ? 0
+    ? 12
     : isCompact
-      ? 0
+      ? 10
       : readerWidth < 1180
         ? 8
         : readerWidth < 1800
