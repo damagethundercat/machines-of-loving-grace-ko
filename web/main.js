@@ -18,6 +18,10 @@ const TYPE_SCALE_PRESETS = {
   large: 1.1,
 };
 const INLINE_NOTE_RIGHT_INSET = 28;
+const COVER_MAIN_PANEL_RATIO = 724 / 960;
+const COVER_TOP_PANEL_RATIO = 294 / 635;
+const COVER_RIGHT_PANEL_RATIO = 1333 / 637;
+const COVER_SIDE_STACK_RATIO = COVER_TOP_PANEL_RATIO + COVER_RIGHT_PANEL_RATIO;
 
 const NOTE_PREVIEW_OVERRIDES = new Map([
   [
@@ -90,6 +94,7 @@ const state = {
   notePreviewHideTimer: 0,
   typeScale: "medium",
   layoutUpdateRaf: 0,
+  coverLayoutRaf: 0,
 };
 
 init().catch((error) => {
@@ -1087,6 +1092,78 @@ function renderPages() {
     pageTrack.appendChild(shell);
   }
   syncTrackGeometry();
+  queueCoverResponsiveLayout();
+}
+
+function queueCoverResponsiveLayout() {
+  if (state.coverLayoutRaf) {
+    window.cancelAnimationFrame(state.coverLayoutRaf);
+  }
+
+  state.coverLayoutRaf = window.requestAnimationFrame(() => {
+    state.coverLayoutRaf = 0;
+    syncCoverResponsiveLayout();
+  });
+}
+
+function syncCoverResponsiveLayout() {
+  const coverPage = pageTrack.querySelector(".page--cover");
+  const coverArt = coverPage?.querySelector(".cover-art");
+  if (!(coverPage instanceof HTMLElement) || !(coverArt instanceof HTMLElement)) {
+    return;
+  }
+
+  const clearResponsiveVars = () => {
+    coverPage.style.removeProperty("--cover-panel-group-width");
+    coverPage.style.removeProperty("--cover-panel-gap");
+    coverPage.style.removeProperty("--cover-side-width");
+    coverPage.style.removeProperty("--cover-side-gap");
+    coverPage.style.removeProperty("--cover-suits-left");
+    coverPage.style.removeProperty("--cover-suits-top");
+    coverPage.style.removeProperty("--cover-suits-width");
+    coverPage.style.removeProperty("--cover-meta-margin-left");
+    coverPage.style.removeProperty("--cover-meta-width");
+  };
+
+  if (window.innerWidth <= 1100) {
+    clearResponsiveVars();
+    return;
+  }
+
+  const artWidth = Math.max(coverArt.clientWidth, 1);
+  const artHeight = Math.max(coverArt.clientHeight, 1);
+  const compactDesktop = window.innerWidth <= 1520 || window.innerHeight <= 920;
+  const gap = compactDesktop ? clamp(window.innerWidth * 0.014, 16, 22) : clamp(window.innerWidth * 0.018, 18, 28);
+  const sideGap = compactDesktop ? clamp(window.innerWidth * 0.011, 12, 18) : clamp(window.innerWidth * 0.014, 14, 24);
+  const groupWidthByHeight =
+    artHeight * (960 / 724) + gap + Math.max(0, (artHeight - sideGap) / COVER_SIDE_STACK_RATIO);
+  const groupWidthByWidth = Math.min(artWidth * (compactDesktop ? 0.775 : 0.81), compactDesktop ? 960 : 1080);
+  const groupWidth = Math.min(groupWidthByWidth, groupWidthByHeight);
+  const sideWidthByHeight = Math.max(188, Math.min(compactDesktop ? 296 : 330, (artHeight - sideGap) / COVER_SIDE_STACK_RATIO));
+  const sideShare = sideWidthByHeight / Math.max(groupWidthByHeight, 1);
+  const sideWidth = clamp(
+    groupWidth * sideShare,
+    compactDesktop ? 206 : 232,
+    compactDesktop ? 296 : 330,
+  );
+  const mainWidth = Math.max(320, groupWidth - gap - sideWidth);
+  const groupLeft = Math.max(0, artWidth - groupWidth);
+  const mainHeight = mainWidth * COVER_MAIN_PANEL_RATIO;
+  const suitsWidth = mainWidth * (compactDesktop ? 0.5 : 0.48);
+  const suitsLeft = groupLeft + mainWidth * 0.12;
+  const suitsTop = Math.min(artHeight - suitsWidth * 0.18, mainHeight * (compactDesktop ? 0.61 : 0.63));
+  const metaWidth = Math.min(mainWidth * 0.58, compactDesktop ? 420 : 460);
+  const metaMarginLeft = groupLeft + mainWidth * 0.02;
+
+  coverPage.style.setProperty("--cover-panel-group-width", `${Math.round(groupWidth)}px`);
+  coverPage.style.setProperty("--cover-panel-gap", `${Math.round(gap)}px`);
+  coverPage.style.setProperty("--cover-side-width", `${Math.round(sideWidth)}px`);
+  coverPage.style.setProperty("--cover-side-gap", `${Math.round(sideGap)}px`);
+  coverPage.style.setProperty("--cover-suits-left", `${Math.round(suitsLeft)}px`);
+  coverPage.style.setProperty("--cover-suits-top", `${Math.round(suitsTop)}px`);
+  coverPage.style.setProperty("--cover-suits-width", `${Math.round(suitsWidth)}px`);
+  coverPage.style.setProperty("--cover-meta-margin-left", `${Math.round(metaMarginLeft)}px`);
+  coverPage.style.setProperty("--cover-meta-width", `${Math.round(metaWidth)}px`);
 }
 
 function syncTrackGeometry() {

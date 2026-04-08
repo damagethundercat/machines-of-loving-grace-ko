@@ -703,19 +703,19 @@ body.is-cover-active .contents-panel {
 }
 
 .cover-panel-group {
-  width: min(81%, 1080px);
+  width: var(--cover-panel-group-width, min(81%, 1080px));
   margin-left: auto;
   display: flex;
   align-items: flex-start;
-  gap: clamp(18px, 1.8vw, 28px);
+  gap: var(--cover-panel-gap, clamp(18px, 1.8vw, 28px));
   z-index: 1;
 }
 
 .cover-side-stack {
-  flex: 0 0 clamp(232px, 25.5%, 330px);
+  flex: 0 0 var(--cover-side-width, clamp(232px, 25.5%, 330px));
   display: flex;
   flex-direction: column;
-  gap: clamp(14px, 1.5vw, 24px);
+  gap: var(--cover-side-gap, clamp(14px, 1.5vw, 24px));
 }
 
 .cover-panel {
@@ -756,22 +756,23 @@ body.is-cover-active .contents-panel {
 
 .cover-structure {
   display: none;
+  z-index: 2;
 }
 
 .cover-suits {
-  left: 9.4%;
-  top: 51.4%;
-  width: 39.8%;
+  left: var(--cover-suits-left, 9.4%);
+  top: var(--cover-suits-top, 51.4%);
+  width: var(--cover-suits-width, 39.8%);
   filter: drop-shadow(0 2px 2px rgba(26, 26, 26, 0.24));
-  z-index: 3;
+  z-index: 6;
 }
 
 .cover-meta {
-  width: min(39.2%, 32rem);
-  margin-left: 19.4%;
+  width: var(--cover-meta-width, min(39.2%, 32rem));
+  margin-left: var(--cover-meta-margin-left, 19.4%);
   align-self: flex-start;
   position: relative;
-  z-index: 4;
+  z-index: 5;
   display: grid;
   gap: 0.5rem;
   justify-items: start;
