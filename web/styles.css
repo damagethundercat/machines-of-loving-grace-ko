@@ -598,8 +598,18 @@ body.is-cover-active .contents-panel {
     max(18px, env(safe-area-inset-bottom))
     max(18px, env(safe-area-inset-left));
   display: grid;
-  place-items: center;
+  align-items: center;
+  justify-items: center;
   scroll-snap-align: start;
+}
+
+.page-shell--content {
+  justify-items: start;
+}
+
+.page-shell--content .page {
+  margin-left: clamp(28px, 4.8vw, 92px);
+  margin-right: auto;
 }
 
 .page {
@@ -925,6 +935,15 @@ body.is-cover-active .contents-panel {
   .page-shell {
     padding-left: max(8px, env(safe-area-inset-left));
     padding-right: max(8px, env(safe-area-inset-right));
+  }
+
+  .page-shell--content {
+    justify-items: center;
+  }
+
+  .page-shell--content .page {
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .page--cover {

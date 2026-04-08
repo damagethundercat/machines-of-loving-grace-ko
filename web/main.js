@@ -17,6 +17,7 @@ const TYPE_SCALE_PRESETS = {
   medium: 1,
   large: 1.1,
 };
+const INLINE_NOTE_RIGHT_INSET = 28;
 
 const NOTE_PREVIEW_OVERRIDES = new Map([
   [
@@ -242,7 +243,7 @@ function onReaderPointerOver(event) {
   }
 
   const noteNumber = Number(anchor.dataset.noteNumber);
-  if (!Number.isFinite(noteNumber) || !state.endnotes.has(noteNumber)) {
+  if (!Number.isFinite(noteNumber) || !hasInlineNotePreviewContent(noteNumber)) {
     return;
   }
 
@@ -1050,7 +1051,9 @@ function renderPages() {
   pageTrack.innerHTML = "";
   for (const page of state.pages) {
     const shell = document.createElement("section");
-    shell.className = "page-shell";
+    shell.className = `page-shell ${
+      page.type === "cover" ? "page-shell--cover" : "page-shell--content"
+    }`;
     shell.dataset.pageIndex = String(page.index);
     shell.appendChild(page.type === "cover" ? renderCoverPage() : renderContentPage(page));
     pageTrack.appendChild(shell);
@@ -1346,8 +1349,12 @@ function shouldUseInlineNotePreview() {
     window.innerWidth < 1400
       ? clamp(window.innerWidth * 0.145, 200, 248)
       : clamp(window.innerWidth * 0.18, 220, 288);
+  const measuredSpace = measureInlineNoteSpace(null, inlineNoteWidth);
+  if (measuredSpace) {
+    return measuredSpace.canInline;
+  }
 
-  return sideGutter >= inlineNoteWidth + 28;
+  return sideGutter >= inlineNoteWidth + INLINE_NOTE_RIGHT_INSET;
 }
 
 function shouldUseMobileNoteSheet() {
@@ -1424,7 +1431,47 @@ function openNotePreview(noteNumber, anchor, options = {}) {
     return;
   }
 
+  const inlineSpace = measureInlineNoteSpace(anchor, notePreview.offsetWidth);
+  if (inlineSpace && !inlineSpace.canInline) {
+    notePreview.classList.add("note-preview--sheet");
+    notePreview.style.removeProperty("--note-preview-top");
+    return;
+  }
+
   placeNotePreview(anchor);
+}
+
+function getCurrentPageElement(anchor = null) {
+  const anchoredPage = anchor?.closest(".page");
+  if (anchoredPage instanceof HTMLElement) {
+    return anchoredPage;
+  }
+
+  return pageTrack?.querySelector(
+    `.page-shell[data-page-index="${state.currentPage}"] .page`,
+  );
+}
+
+function measureInlineNoteSpace(anchor, previewWidth) {
+  if (!notePreview) {
+    return null;
+  }
+
+  const column = notePreview.parentElement;
+  const pageElement = getCurrentPageElement(anchor);
+  if (!(column instanceof HTMLElement) || !(pageElement instanceof HTMLElement)) {
+    return null;
+  }
+
+  const columnRect = column.getBoundingClientRect();
+  const pageRect = pageElement.getBoundingClientRect();
+  const requiredWidth = Math.max(previewWidth || 0, 0);
+  const availableRight = Math.max(0, columnRect.right - pageRect.right);
+
+  return {
+    availableRight,
+    canInline: availableRight >= requiredWidth + INLINE_NOTE_RIGHT_INSET,
+  };
 }
 
 function placeNotePreview(anchor) {
