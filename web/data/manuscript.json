@@ -2700,6 +2700,167 @@
       ]
     },
     {
+      "type": "asterism",
+      "id": "web-postscript-asterism-1",
+      "text": "♥ ♣ ♠"
+    },
+    {
+      "type": "section",
+      "id": "web-postscript-section",
+      "text": "웹판 후주",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "웹판 후주"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-1",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "다리오 아모데이의 에세이 《사랑과 은총의 기계들》을 번역하고 웹으로 만들었습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-2",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "2026년 4월 8일, Anthropic이 Mythos Preview라는 새로운 모델을 발표했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-3",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "너무 강력해서 일반에 공개하지 않기로 했다고 합니다. 수십 년간 발견되지 않았던 보안 취약점들을 혼자 찾아내고, 외부 인터넷 없이 고립시켜놨지만 스스로 취약점을 발견해 인터넷을 연결한 뒤 개발자에게 메일을 보내기도 했습니다. 단편적으로 보면 두려운 소식입니다. 그러나 저는 조금 다른 감각을 느꼈습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-4",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "우리가 드디어 가시권에 들어섰다는 감각을요."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-5",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "몇 년 전, 다리오 아모데이라는 사람이 에세이 하나를 썼습니다. 제목은 Machines of Loving Grace, 우리말로 하면 사랑과 은총의 기계들. AI가 가까운 미래에 암을 정복하고, 정신건강의 위기를 해결하고, 수백 년치 과학적 진보를 단 몇 년 안에 이뤄낼 수 있다는 내용입니다. 언뜻보면 공상과학 소설 같은 이야기입니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-6",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "지금은 그렇게 읽히지 않습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-7",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "세상이 어둡습니다. 지구 반대편에서는 미사일이 날아다니고, AI는 빠르게 발전하지만 삶에 떨어지는 것은 불안뿐인 것 같습니다. 직업은 흔들리고, 미래는 불투명하고, 변화는 우리가 이해하는 속도보다 빠릅니다. 사람들은 두려워하거나, 아예 외면해버립니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-8",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "흐름이 어디로 가는지 직관해야 합니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-9",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "OpenAI도, Anthropic도, Google도 서로 경쟁하고 시기하고 다시 경쟁하지만, 모두가 향하는 목표는 하나입니다. 더 나은 미래. 그 믿음 하나가 이 거대한 흐름을 움직이고 있습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-10",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "NASA는 아르테미스 프로젝트로 인류를 다시 달로 보냅니다. 아폴로로부터 60년이 넘게 흘렀습니다. 아폴로가 냉전의 불안에서 태어났다면, 아르테미스는 의지와 희망으로 출발합니다. 그리고 공교롭게도, 신화를 뜻하는 이름의 모델 Mythos가 같은 시기에 등장했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-11",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "저는 이 에세이를 많은 사람들이 읽었으면 하는 바람에서 우리말로 번역하고, 웹으로 퍼블리싱했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-12",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "미래를 정확히 들여다볼 수는 없지만, 우리가 어디를 향하고 있는지는 알 수 있습니다. 알고 나면, 두려움과 희망이 동시에 보입니다. 그 두 가지가 모순 없이 함께 존재할 수 있다는 것도요."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-13",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "불가능한 공상이라고 생각했던 것들이, 이제 실현 가능한 현실로 다가오고 있습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "id": "web-postscript-paragraph-14",
+      "tokens": [
+        {
+          "type": "text",
+          "text": "낙관할 수 있습니다."
+        }
+      ]
+    },
+    {
+      "type": "asterism",
+      "id": "web-postscript-asterism-2",
+      "text": "♥ ♣ ♠"
+    },
+    {
       "type": "endnoteHeading",
       "id": "endnotes",
       "text": "미주",
