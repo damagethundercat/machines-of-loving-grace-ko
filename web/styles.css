@@ -1011,6 +1011,8 @@ body.is-cover-active .contents-panel {
   }
 
   .note-preview.note-preview--sheet {
+    left: max(12px, env(safe-area-inset-left));
+    right: max(12px, env(safe-area-inset-right));
     bottom: 0;
   }
 
@@ -1233,6 +1235,8 @@ body.is-cover-active .contents-panel {
   }
 
   .note-preview.note-preview--sheet {
+    left: max(16px, env(safe-area-inset-left));
+    right: max(16px, env(safe-area-inset-right));
     bottom: 0;
     max-height: min(50svh, 360px);
     padding:
@@ -1366,6 +1370,8 @@ body.is-cover-active .contents-panel {
   }
 
   .note-preview.note-preview--sheet {
+    left: max(18px, env(safe-area-inset-left));
+    right: max(18px, env(safe-area-inset-right));
     bottom: 0;
     max-height: min(52svh, 330px);
     padding:
