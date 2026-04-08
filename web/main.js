@@ -1524,31 +1524,21 @@ function isTouchLikeViewport() {
 }
 
 function hasComfortableCoverStructurePreviewSpace() {
-  const coverPage = pageTrack?.querySelector(".page--cover");
-  const coverArt = coverPage?.querySelector(".cover-art");
-  const panelGroup = coverPage?.querySelector(".cover-panel-group");
-  if (!(coverArt instanceof HTMLElement) || !(panelGroup instanceof HTMLElement)) {
-    return false;
-  }
-
   const viewportWidth =
     window.visualViewport?.width ||
     window.innerWidth ||
     document.documentElement.clientWidth ||
     0;
-  const artRect = coverArt.getBoundingClientRect();
-  const groupRect = panelGroup.getBoundingClientRect();
-  const coverWidth = artRect.width;
-  const leftStructureLane = Math.max(0, groupRect.left - artRect.left);
+  const viewportHeight =
+    window.visualViewport?.height ||
+    window.innerHeight ||
+    document.documentElement.clientHeight ||
+    0;
 
-  // 표지 1번 각주는 실제 뷰포트 폭과 표지 왼쪽 여백만으로 판단합니다.
-  // 표지를 화면 높이에 맞춰 줄이면 art 비율은 크게 변할 수 있으므로,
-  // aspect ratio 조건은 오히려 맥/랩톱에서 오탐을 만들었습니다.
-  return (
-    viewportWidth >= 1240 &&
-    coverWidth >= 860 &&
-    leftStructureLane >= 180
-  );
+  // 표지 1번 각주는 데스크톱 폭 이상이면 왼쪽 구조물 오버레이를 우선합니다.
+  // 이 케이스에서 세부 레인 폭 계산은 브라우저별 hit-test 차이보다 불안정해서,
+  // 실제 디바이스 대응은 폭/높이 기준으로 단순화하는 편이 더 견고합니다.
+  return viewportWidth >= 1240 && viewportHeight >= 700;
 }
 
 function shouldUseCoverStructureNotePreview(noteNumber) {
