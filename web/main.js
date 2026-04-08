@@ -140,6 +140,8 @@ function installEventHandlers() {
   reader.addEventListener("click", onReaderClick);
   reader.addEventListener("pointerover", onReaderPointerOver);
   reader.addEventListener("pointerout", onReaderPointerOut);
+  reader.addEventListener("mouseover", onReaderPointerOver);
+  reader.addEventListener("mouseout", onReaderPointerOut);
   reader.addEventListener("wheel", onReaderWheel, { passive: false });
   reader.addEventListener("scroll", onReaderScroll, { passive: true });
   contentsPanel?.addEventListener("click", onContentsClick);
@@ -152,6 +154,8 @@ function installEventHandlers() {
   pageSlider?.addEventListener("wheel", onPageSliderWheel, { passive: false });
   notePreview?.addEventListener("pointerenter", onNotePreviewPointerEnter);
   notePreview?.addEventListener("pointerleave", onNotePreviewPointerLeave);
+  notePreview?.addEventListener("mouseenter", onNotePreviewPointerEnter);
+  notePreview?.addEventListener("mouseleave", onNotePreviewPointerLeave);
   typeScaleControls?.addEventListener("click", onTypeScaleControlsClick);
 
   document.addEventListener("pointerdown", onDocumentPointerDown);
