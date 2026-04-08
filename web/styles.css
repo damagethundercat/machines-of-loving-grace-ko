@@ -900,18 +900,24 @@ body.is-cover-active .contents-panel {
     width: 29.6%;
   }
 
+  /* Tablet/mobile cover tuning:
+     change `top` to move the right vertical panel up/down,
+     and `width` to resize that panel. */
   .cover-panel--right {
     right: 0;
     top: 22.2%;
     width: 29.6%;
   }
 
+  /* Tablet/mobile cover tuning:
+     change `left`, `top`, and `width` to place the white structure asset.
+     More negative `left` crops more off the left edge. Larger `top` pushes it lower. */
   .cover-structure {
     display: block;
     left: -7%;
     top: 48.4%;
     width: 76%;
-    opacity: 0.58;
+    opacity: 1;
     z-index: 2;
   }
 
@@ -972,16 +978,22 @@ body.is-cover-active .contents-panel {
     width: 26.8%;
   }
 
+  /* Phone cover tuning:
+     change `top` to move the right vertical panel up/down,
+     and `width` to resize that panel. */
   .cover-panel--right {
     top: 23.4%;
     width: 26.8%;
   }
 
+  /* Phone cover tuning:
+     change `left`, `top`, and `width` to place the white structure asset.
+     More negative `left` crops more off the left edge. Larger `top` pushes it lower. */
   .cover-structure {
     left: -10%;
     top: 54%;
     width: 88%;
-    opacity: 0.6;
+    opacity: 1;
   }
 
   .cover-suits {
@@ -1035,6 +1047,24 @@ body.is-cover-active .contents-panel {
       calc(16px + env(safe-area-inset-bottom))
       max(16px, env(safe-area-inset-left));
     border-radius: 18px 18px 0 0;
+  }
+
+  .note-preview-title {
+    font-size: 0.92rem;
+  }
+
+  .note-preview-author {
+    font-size: 0.74rem;
+  }
+
+  .note-preview-text {
+    font-size: 0.88rem;
+    line-height: 1.68;
+  }
+
+  .note-preview-line {
+    font-size: 0.83rem;
+    line-height: 1.62;
   }
 }
 
@@ -1092,16 +1122,22 @@ body.is-cover-active .contents-panel {
     width: 27.8%;
   }
 
+  /* Narrow-phone cover tuning:
+     change `top` to move the right vertical panel up/down,
+     and `width` to resize that panel. */
   .cover-panel--right {
     top: 24.4%;
     width: 27.8%;
   }
 
+  /* Narrow-phone cover tuning:
+     change `left`, `top`, and `width` to place the white structure asset.
+     More negative `left` crops more off the left edge. Larger `top` pushes it lower. */
   .cover-structure {
     left: -14%;
     top: 57%;
     width: 104%;
-    opacity: 0.62;
+    opacity: 1;
   }
 
   .cover-suits {
@@ -1142,6 +1178,24 @@ body.is-cover-active .contents-panel {
       max(14px, env(safe-area-inset-right))
       calc(15px + env(safe-area-inset-bottom))
       max(14px, env(safe-area-inset-left));
+  }
+
+  .note-preview-title {
+    font-size: 0.88rem;
+  }
+
+  .note-preview-author {
+    font-size: 0.72rem;
+  }
+
+  .note-preview-text {
+    font-size: 0.84rem;
+    line-height: 1.62;
+  }
+
+  .note-preview-line {
+    font-size: 0.8rem;
+    line-height: 1.56;
   }
 }
 
