@@ -1109,11 +1109,19 @@ function queueCoverResponsiveLayout() {
 function syncCoverResponsiveLayout() {
   const coverPage = pageTrack.querySelector(".page--cover");
   const coverArt = coverPage?.querySelector(".cover-art");
-  if (!(coverPage instanceof HTMLElement) || !(coverArt instanceof HTMLElement)) {
+  const coverMeta = coverPage?.querySelector(".cover-meta");
+  const pageShell = coverPage?.closest(".page-shell");
+  if (
+    !(coverPage instanceof HTMLElement) ||
+    !(coverArt instanceof HTMLElement) ||
+    !(coverMeta instanceof HTMLElement) ||
+    !(pageShell instanceof HTMLElement)
+  ) {
     return;
   }
 
   const clearResponsiveVars = () => {
+    coverPage.style.removeProperty("--cover-art-height");
     coverPage.style.removeProperty("--cover-panel-group-width");
     coverPage.style.removeProperty("--cover-panel-gap");
     coverPage.style.removeProperty("--cover-side-width");
@@ -1132,22 +1140,41 @@ function syncCoverResponsiveLayout() {
   }
 
   const artWidth = Math.max(coverArt.clientWidth, 1);
-  const artHeight = Math.max(coverArt.clientHeight, 1);
   const compactDesktop = window.innerWidth <= 1520 || window.innerHeight <= 920;
+  const coverStyle = window.getComputedStyle(coverPage);
+  const paddingTop = Number.parseFloat(coverStyle.paddingTop || "0") || 0;
+  const paddingBottom = Number.parseFloat(coverStyle.paddingBottom || "0") || 0;
+  const coverGap = Number.parseFloat(coverStyle.rowGap || coverStyle.gap || "0") || 0;
+  const metaHeight = Math.max(coverMeta.offsetHeight, 1);
+  const artHeightTarget = compactDesktop
+    ? clamp(window.innerHeight * 0.49, 300, 560)
+    : clamp(window.innerHeight * 0.56, 360, 620);
+  // 표지 메타 블록과 여백까지 포함해 현재 page-shell 높이 안에 들어오도록
+  // 하늘 패널 묶음 높이를 제한합니다. 그래야 제목/각주가 하단 컨트롤 영역으로
+  // 밀려나지 않고, 맥에서 hover hit-test도 안정됩니다.
+  const metaOffsetY = compactDesktop ? 56 : 36;
+  const maxArtHeightFromPage = Math.max(
+    compactDesktop ? 240 : 300,
+    pageShell.clientHeight -
+      paddingTop -
+      paddingBottom -
+      coverGap -
+      metaHeight -
+      metaOffsetY -
+      (compactDesktop ? 18 : 10),
+  );
+  const artHeight = Math.min(artHeightTarget, maxArtHeightFromPage);
   const gap = compactDesktop ? clamp(window.innerWidth * 0.014, 16, 22) : clamp(window.innerWidth * 0.018, 18, 28);
   const sideGap = compactDesktop ? clamp(window.innerWidth * 0.011, 12, 18) : clamp(window.innerWidth * 0.014, 14, 24);
-  const groupWidthByHeight =
-    artHeight * (960 / 724) + gap + Math.max(0, (artHeight - sideGap) / COVER_SIDE_STACK_RATIO);
-  const groupWidthByWidth = Math.min(artWidth * (compactDesktop ? 0.775 : 0.81), compactDesktop ? 960 : 1080);
-  const groupWidth = Math.min(groupWidthByWidth, groupWidthByHeight);
-  const sideWidthByHeight = Math.max(188, Math.min(compactDesktop ? 296 : 330, (artHeight - sideGap) / COVER_SIDE_STACK_RATIO));
-  const sideShare = sideWidthByHeight / Math.max(groupWidthByHeight, 1);
   const sideWidth = clamp(
-    groupWidth * sideShare,
-    compactDesktop ? 206 : 232,
+    (artHeight - sideGap) / COVER_SIDE_STACK_RATIO,
+    compactDesktop ? 124 : 184,
     compactDesktop ? 296 : 330,
   );
-  const mainWidth = Math.max(320, groupWidth - gap - sideWidth);
+  const groupWidthByHeight = artHeight / COVER_MAIN_PANEL_RATIO + gap + sideWidth;
+  const groupWidthByWidth = Math.min(artWidth * (compactDesktop ? 0.775 : 0.81), compactDesktop ? 960 : 1080);
+  const groupWidth = Math.min(groupWidthByWidth, groupWidthByHeight);
+  const mainWidth = Math.max(300, groupWidth - gap - sideWidth);
   const groupLeft = Math.max(0, artWidth - groupWidth);
   const mainHeight = mainWidth * COVER_MAIN_PANEL_RATIO;
   const suitsWidth = mainWidth * (compactDesktop ? 0.39 : 0.43);
@@ -1164,11 +1191,11 @@ function syncCoverResponsiveLayout() {
   // `metaOffsetX` 값을 키우면 더 오른쪽으로 이동합니다.
   // `metaOffsetY` 값을 키우면 더 아래로 내려갑니다.
   const metaOffsetX = compactDesktop ? 40 : 2;
-  const metaOffsetY = compactDesktop ? 56 : 36;
   const metaMarginLeft = groupLeft + metaOffsetX;
   const metaMarginTop = metaOffsetY;
 
 
+  coverPage.style.setProperty("--cover-art-height", `${Math.round(artHeight)}px`);
   coverPage.style.setProperty("--cover-panel-group-width", `${Math.round(groupWidth)}px`);
   coverPage.style.setProperty("--cover-panel-gap", `${Math.round(gap)}px`);
   coverPage.style.setProperty("--cover-side-width", `${Math.round(sideWidth)}px`);
@@ -1500,19 +1527,22 @@ function hasComfortableCoverStructurePreviewSpace() {
     return false;
   }
 
+  const viewportWidth =
+    window.visualViewport?.width ||
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    0;
   const artRect = coverArt.getBoundingClientRect();
   const groupRect = panelGroup.getBoundingClientRect();
   const coverWidth = artRect.width;
-  const coverHeight = artRect.height;
   const leftStructureLane = Math.max(0, groupRect.left - artRect.left);
-  const aspectRatio = coverWidth / Math.max(coverHeight, 1);
 
-  // 표지 1번 각주는 실제 "표지 아트 내부의 왼쪽 구조물 공간"이 충분한지를 기준으로 판단합니다.
-  // reader 폭은 좌측 목차/여백 영향으로 맥에서 과소평가되므로 사용하지 않습니다.
+  // 표지 1번 각주는 실제 뷰포트 폭과 표지 왼쪽 여백만으로 판단합니다.
+  // 표지를 화면 높이에 맞춰 줄이면 art 비율은 크게 변할 수 있으므로,
+  // aspect ratio 조건은 오히려 맥/랩톱에서 오탐을 만들었습니다.
   return (
+    viewportWidth >= 1240 &&
     coverWidth >= 860 &&
-    coverHeight >= 420 &&
-    aspectRatio <= 3.2 &&
     leftStructureLane >= 180
   );
 }
@@ -1603,6 +1633,7 @@ function openNotePreview(noteNumber, anchor, options = {}) {
     notePreview.style.removeProperty("--note-preview-top");
     notePreview.style.removeProperty("left");
     notePreview.style.removeProperty("right");
+    notePreview.style.removeProperty("max-height");
     return;
   }
 
@@ -1664,16 +1695,20 @@ function placeNotePreview(anchor) {
 
   const columnRect = column.getBoundingClientRect();
   const readerRect = reader?.getBoundingClientRect() ?? columnRect;
+  const pageRect = getCurrentPageElement(anchor)?.getBoundingClientRect() ?? readerRect;
+  const previewBottomLimit = Math.min(readerRect.bottom, pageRect.bottom);
+  const maxPreviewHeight = Math.max(previewBottomLimit - columnRect.top - 32, 180);
   const anchorRect = anchor.getBoundingClientRect();
   notePreview.style.removeProperty("left");
   notePreview.style.removeProperty("right");
+  notePreview.style.maxHeight = `${Math.round(maxPreviewHeight)}px`;
 
   if (notePreview.classList.contains("note-preview--cover-left")) {
     const coverPage = anchor.closest(".page--cover");
     const coverArt = coverPage?.querySelector(".cover-art");
     if (coverArt instanceof HTMLElement) {
       const coverArtRect = coverArt.getBoundingClientRect();
-      const availableBottom = Math.max(readerRect.bottom - columnRect.top - 28, 24);
+      const availableBottom = Math.max(previewBottomLimit - columnRect.top - 24, 24);
       const maxTop = Math.max(availableBottom - notePreview.offsetHeight, 24);
       const top = clamp(
         coverArtRect.top - columnRect.top + Math.max(28, coverArtRect.height * 0.12),
@@ -1696,7 +1731,7 @@ function placeNotePreview(anchor) {
     const topPanel = coverPage?.querySelector(".cover-panel--top");
     if (topPanel instanceof HTMLElement) {
       const topPanelRect = topPanel.getBoundingClientRect();
-      const availableBottom = Math.max(readerRect.bottom - columnRect.top - 28, 24);
+      const availableBottom = Math.max(previewBottomLimit - columnRect.top - 24, 24);
       const maxTop = Math.max(availableBottom - notePreview.offsetHeight, 24);
       const coverTop = clamp(topPanelRect.bottom - columnRect.top + 18, 24, maxTop);
       notePreview.style.setProperty("--note-preview-top", `${Math.round(coverTop)}px`);
@@ -1705,7 +1740,7 @@ function placeNotePreview(anchor) {
     }
   }
   const preferredTop = anchorRect.top - columnRect.top - 18;
-  const availableBottom = Math.max(readerRect.bottom - columnRect.top - 28, 24);
+  const availableBottom = Math.max(previewBottomLimit - columnRect.top - 24, 24);
   const maxTop = Math.max(availableBottom - notePreview.offsetHeight, 24);
   const top = clamp(preferredTop, 24, maxTop);
   notePreview.style.setProperty("--note-preview-top", `${Math.round(top)}px`);
@@ -1732,6 +1767,7 @@ function closeNotePreview() {
   notePreview.style.removeProperty("--note-preview-top");
   notePreview.style.removeProperty("left");
   notePreview.style.removeProperty("right");
+  notePreview.style.removeProperty("max-height");
   state.activeNoteNumber = null;
   state.pinnedNoteNumber = null;
   updateActiveNoteRefs();
@@ -2047,4 +2083,3 @@ function showError(message) {
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
-

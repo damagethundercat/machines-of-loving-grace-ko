@@ -796,28 +796,6 @@ body.is-cover-active .contents-panel {
   .cover-art {
     height: var(--cover-art-height, clamp(330px, 49vh, 560px));
   }
-
-  .cover-panel-group {
-    width: min(78.5%, 960px);
-    gap: clamp(16px, 1.6vw, 22px);
-  }
-
-  .cover-side-stack {
-    flex: 0 0 clamp(214px, 24.4%, 296px);
-    gap: clamp(12px, 1.35vw, 18px);
-  }
-
-  .cover-suits {
-    left: 10.8%;
-    top: 53.8%;
-    width: 37.2%;
-  }
-
-  .cover-meta {
-    width: min(40.5%, 28rem);
-    margin-left: 20.8%;
-    gap: 0.44rem;
-  }
 }
 
 .cover-title {
@@ -1033,7 +1011,7 @@ body.is-cover-active .contents-panel {
   }
 
   .note-preview.note-preview--sheet {
-    bottom: max(40px, calc(8px + env(safe-area-inset-bottom)));
+    bottom: 0;
   }
 
   .note-preview.note-preview--sheet::before {
@@ -1255,7 +1233,7 @@ body.is-cover-active .contents-panel {
   }
 
   .note-preview.note-preview--sheet {
-    bottom: max(46px, calc(10px + env(safe-area-inset-bottom)));
+    bottom: 0;
     max-height: min(50svh, 360px);
     padding:
       16px
@@ -1388,7 +1366,7 @@ body.is-cover-active .contents-panel {
   }
 
   .note-preview.note-preview--sheet {
-    bottom: max(54px, calc(12px + env(safe-area-inset-bottom)));
+    bottom: 0;
     max-height: min(52svh, 330px);
     padding:
       15px
