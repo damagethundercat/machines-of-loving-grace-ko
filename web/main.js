@@ -1157,8 +1157,8 @@ function syncCoverResponsiveLayout() {
     mainHeight * (compactDesktop ? 0.665 : 0.655),
   );
   const metaWidth = Math.min(mainWidth * (compactDesktop ? 0.52 : 0.56), compactDesktop ? 410 : 450);
-  const metaMarginLeft = groupLeft + mainWidth * (compactDesktop ? 0.085 : 0.055);
-  const metaMarginTop = compactDesktop ? 20 : 10;
+  const metaMarginLeft = groupLeft;
+  const metaMarginTop = compactDesktop ? 36 : 20;
 
   coverPage.style.setProperty("--cover-panel-group-width", `${Math.round(groupWidth)}px`);
   coverPage.style.setProperty("--cover-panel-gap", `${Math.round(gap)}px`);
