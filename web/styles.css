@@ -1072,48 +1072,52 @@ body.is-cover-active .contents-panel {
   }
 
   .cover-art {
-    height: clamp(320px, 46vh, 500px);
+    min-height: clamp(320px, 46vh, 500px);
+    height: auto;
   }
 
   .cover-panel-group {
     width: 100%;
-    height: 100%;
+    height: auto;
     margin-left: 0;
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
   }
 
   .cover-side-stack {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 29.6%;
-    height: 100%;
-    display: block;
+    position: relative;
+    flex: 0 0 29.6%;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .cover-panel {
-    position: absolute;
+    position: relative;
   }
 
   .cover-panel--main {
-    left: 0;
-    top: 0;
-    width: 63.6%;
-    flex: none;
+    left: auto;
+    top: auto;
+    flex: 1 1 auto;
+    width: auto;
   }
 
   .cover-panel--top {
-    right: 0;
-    top: 0;
+    right: auto;
+    top: auto;
     width: 100%;
   }
 
   /* Tablet/mobile cover tuning:
-     change `.cover-side-stack` `width` to resize both right sky panels together.
-     change `.cover-panel--right` `top` to move the vertical panel up/down. */
+     change `.cover-side-stack` `flex-basis` to resize both right sky panels together.
+     change `.cover-side-stack` `gap` to adjust the vertical space between the two right panels. */
   .cover-panel--right {
-    right: 0;
-    top: 22.2%;
+    right: auto;
+    top: auto;
     width: 100%;
   }
 
@@ -1174,24 +1178,23 @@ body.is-cover-active .contents-panel {
   }
 
   .cover-art {
-    height: clamp(252px, 34vh, 332px);
+    min-height: clamp(252px, 34vh, 332px);
+    height: auto;
   }
 
   .cover-panel--main {
-    left: 0;
-    top: 0;
-    width: 70.2%;
+    width: auto;
   }
 
   .cover-side-stack {
-    width: 26.8%;
+    flex-basis: 26.8%;
+    gap: 10px;
   }
 
   /* Phone cover tuning:
-     change `.cover-side-stack` `width` to resize both right sky panels together.
-     change `.cover-panel--right` `top` to move the vertical panel up/down. */
+     change `.cover-side-stack` `flex-basis` to resize both right sky panels together.
+     change `.cover-side-stack` `gap` to adjust the vertical space between the two right panels. */
   .cover-panel--right {
-    top: 23.4%;
     width: 100%;
   }
 
@@ -1321,22 +1324,23 @@ body.is-cover-active .contents-panel {
   }
 
   .cover-art {
-    height: clamp(246px, 35vh, 320px);
+    min-height: clamp(246px, 35vh, 320px);
+    height: auto;
   }
 
   .cover-panel--main {
-    width: 71.2%;
+    width: auto;
   }
 
   .cover-side-stack {
-    width: 27.8%;
+    flex-basis: 27.8%;
+    gap: 8px;
   }
 
   /* Narrow-phone cover tuning:
-     change `.cover-side-stack` `width` to resize both right sky panels together.
-     change `.cover-panel--right` `top` to move the vertical panel up/down. */
+     change `.cover-side-stack` `flex-basis` to resize both right sky panels together.
+     change `.cover-side-stack` `gap` to adjust the vertical space between the two right panels. */
   .cover-panel--right {
-    top: 17.7%;
     width: 100%;
   }
 
@@ -1413,11 +1417,11 @@ body.is-cover-active .contents-panel {
   /* Short-phone override, e.g. iPhone SE:
      use this block when the narrow-phone defaults feel too tall/loose. */
   .cover-side-stack {
-    width: 27.8%;
+    flex-basis: 27.8%;
+    gap: 8px;
   }
 
   .cover-panel--right {
-    top: 19.4%;
     width: 100%;
   }
 

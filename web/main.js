@@ -1307,8 +1307,8 @@ function renderCoverPage() {
   sideStack.className = "cover-side-stack";
   sideStack.append(topPanel, rightPanel);
 
-  panelGroup.append(mainPanel, sideStack, suits);
-  art.append(panelGroup, structure);
+  panelGroup.append(mainPanel, sideStack);
+  art.append(panelGroup, structure, suits);
 
   const meta = document.createElement("div");
   meta.className = "cover-meta";
