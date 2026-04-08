@@ -1387,7 +1387,7 @@ function isTouchLikeViewport() {
 }
 
 function shouldUseCoverStructureNotePreview(noteNumber) {
-  return state.currentPage === 0 && noteNumber === 1 && window.innerWidth > 1100 && !isTouchLikeViewport();
+  return state.currentPage === 0 && noteNumber === 1 && !isTouchLikeViewport();
 }
 
 function shouldUseMobileNoteSheet() {
