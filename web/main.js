@@ -1315,6 +1315,13 @@ function shouldUseInlineNotePreview() {
     return false;
   }
 
+  const touchLikeViewport =
+    window.matchMedia?.("(hover: none), (pointer: coarse)").matches ||
+    (navigator.maxTouchPoints || 0) > 0;
+  if (touchLikeViewport && window.innerWidth <= 1366) {
+    return false;
+  }
+
   const readerWidth = reader?.clientWidth || window.innerWidth;
   const pageWidth = state.metrics?.pageWidth ?? Math.min(readerWidth, 760);
   const availableSideRoom = Math.max(0, readerWidth - pageWidth);
