@@ -514,7 +514,9 @@ function computeMetrics() {
         ? 18
         : readerWidth < 1400
           ? 10
-          : 0;
+          : readerWidth < 1800
+            ? 0
+            : 18;
   const maxColumnWidth = isCompact
     ? readerWidth - columnInset
     : readerWidth < 1180
