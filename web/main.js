@@ -144,6 +144,7 @@ function installEventHandlers() {
   pageSlider?.addEventListener("pointerup", onPageSliderPointerUp);
   pageSlider?.addEventListener("pointercancel", onPageSliderPointerUp);
   pageSlider?.addEventListener("blur", onPageSliderPointerUp);
+  pageSlider?.addEventListener("wheel", onPageSliderWheel, { passive: false });
   notePreview?.addEventListener("pointerenter", onNotePreviewPointerEnter);
   notePreview?.addEventListener("pointerleave", onNotePreviewPointerLeave);
   typeScaleControls?.addEventListener("click", onTypeScaleControlsClick);
@@ -333,6 +334,11 @@ function onPageSliderPointerUp(event) {
   reader.classList.remove("is-slider-scrubbing");
   const targetPage = resolveNearestPageIndex();
   goToPage(targetPage, { behavior: "auto", updateHash: true });
+}
+
+function onPageSliderWheel(event) {
+  event.preventDefault();
+  event.stopPropagation();
 }
 
 function onReaderWheel(event) {
