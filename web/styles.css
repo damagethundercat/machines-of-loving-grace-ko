@@ -326,9 +326,9 @@ body.is-cover-active .contents-panel {
   overflow-y: auto;
   padding:
     18px
-    max(18px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-right))
     calc(18px + env(safe-area-inset-bottom) + 10px)
-    max(18px, env(safe-area-inset-left));
+    max(24px, env(safe-area-inset-left));
   border-top: 1px solid rgba(26, 26, 26, 0.08);
   border-radius: 20px 20px 0 0;
   background: rgba(245, 245, 245, 0.96);
@@ -1241,9 +1241,9 @@ body.is-cover-active .contents-panel {
     max-height: min(50svh, 360px);
     padding:
       16px
-      max(16px, env(safe-area-inset-right))
+      max(24px, env(safe-area-inset-right))
       calc(16px + env(safe-area-inset-bottom))
-      max(16px, env(safe-area-inset-left));
+      max(24px, env(safe-area-inset-left));
     border-radius: 18px 18px 0 0;
   }
 
@@ -1376,9 +1376,9 @@ body.is-cover-active .contents-panel {
     max-height: min(52svh, 330px);
     padding:
       15px
-      max(14px, env(safe-area-inset-right))
+      max(24px, env(safe-area-inset-right))
       calc(15px + env(safe-area-inset-bottom))
-      max(14px, env(safe-area-inset-left));
+      max(24px, env(safe-area-inset-left));
   }
 
   .note-preview-title {
