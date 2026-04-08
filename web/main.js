@@ -238,12 +238,15 @@ function onReaderPointerOver(event) {
   if (!(anchor instanceof HTMLAnchorElement)) {
     return;
   }
-  if (!shouldUseInlineNotePreview() || state.pinnedNoteNumber != null) {
+  if (state.pinnedNoteNumber != null) {
     return;
   }
 
   const noteNumber = Number(anchor.dataset.noteNumber);
   if (!Number.isFinite(noteNumber) || !hasInlineNotePreviewContent(noteNumber)) {
+    return;
+  }
+  if (!shouldUseInlineNotePreview() && !shouldUseCoverStructureNotePreview(noteNumber)) {
     return;
   }
 
@@ -1376,6 +1379,17 @@ function shouldUseInlineNotePreview() {
   return sideGutter >= inlineNoteWidth + INLINE_NOTE_RIGHT_INSET;
 }
 
+function isTouchLikeViewport() {
+  return Boolean(
+    window.matchMedia?.("(hover: none), (pointer: coarse)").matches ||
+      (navigator.maxTouchPoints || 0) > 0,
+  );
+}
+
+function shouldUseCoverStructureNotePreview(noteNumber) {
+  return state.currentPage === 0 && noteNumber === 1 && window.innerWidth > 1100 && !isTouchLikeViewport();
+}
+
 function shouldUseMobileNoteSheet() {
   return !shouldUseInlineNotePreview();
 }
@@ -1388,8 +1402,9 @@ function tryToggleInlineNotePin(anchor, event) {
   if (!Number.isFinite(noteNumber) || !hasInlineNotePreviewContent(noteNumber)) {
     return false;
   }
+  const useCoverStructurePreview = shouldUseCoverStructureNotePreview(noteNumber);
 
-  if (shouldUseMobileNoteSheet()) {
+  if (!useCoverStructurePreview && shouldUseMobileNoteSheet()) {
     event.preventDefault();
     clearNotePreviewHideTimer();
 
@@ -1402,7 +1417,7 @@ function tryToggleInlineNotePin(anchor, event) {
     return true;
   }
 
-  if (!shouldUseInlineNotePreview()) {
+  if (!useCoverStructurePreview && !shouldUseInlineNotePreview()) {
     return false;
   }
 
@@ -1428,14 +1443,18 @@ function openNotePreview(noteNumber, anchor, options = {}) {
     return;
   }
   const pinned = options.pinned === true;
-  const useMobileSheet = options.mobileSheet === true || shouldUseMobileNoteSheet();
+  const useCoverStructurePreview = shouldUseCoverStructureNotePreview(noteNumber);
+  const useMobileSheet =
+    options.mobileSheet === true || (!useCoverStructurePreview && shouldUseMobileNoteSheet());
 
   notePreview.innerHTML = "";
   notePreview.classList.remove("note-preview--poem");
   notePreview.classList.remove("note-preview--cover");
+  notePreview.classList.remove("note-preview--cover-left");
   notePreview.classList.remove("note-preview--sheet");
   notePreview.classList.toggle("note-preview--poem", previewData.kind === "poem");
   notePreview.classList.toggle("note-preview--cover", state.currentPage === 0 && !useMobileSheet);
+  notePreview.classList.toggle("note-preview--cover-left", useCoverStructurePreview && !useMobileSheet);
   notePreview.classList.toggle("note-preview--sheet", useMobileSheet);
   renderNotePreviewBody(notePreview, previewData, noteNumber);
   notePreview.hidden = false;
@@ -1447,13 +1466,19 @@ function openNotePreview(noteNumber, anchor, options = {}) {
 
   if (useMobileSheet) {
     notePreview.style.removeProperty("--note-preview-top");
+    notePreview.style.removeProperty("left");
+    notePreview.style.removeProperty("right");
     return;
   }
 
-  const inlineSpace = measureInlineNoteSpace(anchor, notePreview.offsetWidth);
+  const inlineSpace = useCoverStructurePreview
+    ? null
+    : measureInlineNoteSpace(anchor, notePreview.offsetWidth);
   if (inlineSpace && !inlineSpace.canInline) {
     notePreview.classList.add("note-preview--sheet");
     notePreview.style.removeProperty("--note-preview-top");
+    notePreview.style.removeProperty("left");
+    notePreview.style.removeProperty("right");
     return;
   }
 
@@ -1504,6 +1529,31 @@ function placeNotePreview(anchor) {
 
   const columnRect = column.getBoundingClientRect();
   const anchorRect = anchor.getBoundingClientRect();
+  notePreview.style.removeProperty("left");
+  notePreview.style.removeProperty("right");
+
+  if (notePreview.classList.contains("note-preview--cover-left")) {
+    const coverPage = anchor.closest(".page--cover");
+    const coverArt = coverPage?.querySelector(".cover-art");
+    if (coverArt instanceof HTMLElement) {
+      const coverArtRect = coverArt.getBoundingClientRect();
+      const maxTop = Math.max(column.clientHeight - notePreview.offsetHeight - 40, 24);
+      const top = clamp(
+        coverArtRect.top - columnRect.top + Math.max(28, coverArtRect.height * 0.12),
+        24,
+        maxTop,
+      );
+      const preferredLeft =
+        coverArtRect.left - columnRect.left - notePreview.offsetWidth - clamp(window.innerWidth * 0.02, 22, 34);
+      const minLeft = -Math.min(notePreview.offsetWidth * 0.72, 260);
+      const left = Math.max(preferredLeft, minLeft);
+      notePreview.style.setProperty("--note-preview-top", `${Math.round(top)}px`);
+      notePreview.style.left = `${Math.round(left)}px`;
+      notePreview.style.right = "auto";
+      return;
+    }
+  }
+
   if (state.currentPage === 0) {
     const coverPage = anchor.closest(".page--cover");
     const topPanel = coverPage?.querySelector(".cover-panel--top");
@@ -1512,6 +1562,7 @@ function placeNotePreview(anchor) {
       const maxTop = Math.max(column.clientHeight - notePreview.offsetHeight - 40, 24);
       const coverTop = clamp(topPanelRect.bottom - columnRect.top + 18, 24, maxTop);
       notePreview.style.setProperty("--note-preview-top", `${Math.round(coverTop)}px`);
+      notePreview.style.right = `max(28px, env(safe-area-inset-right))`;
       return;
     }
   }
@@ -1519,6 +1570,7 @@ function placeNotePreview(anchor) {
   const maxTop = Math.max(column.clientHeight - notePreview.offsetHeight - 40, 24);
   const top = clamp(preferredTop, 24, maxTop);
   notePreview.style.setProperty("--note-preview-top", `${Math.round(top)}px`);
+  notePreview.style.right = `max(28px, env(safe-area-inset-right))`;
 }
 
 function closeNotePreview() {
@@ -1534,10 +1586,13 @@ function closeNotePreview() {
   notePreview.classList.remove("is-pinned");
   notePreview.classList.remove("note-preview--poem");
   notePreview.classList.remove("note-preview--cover");
+  notePreview.classList.remove("note-preview--cover-left");
   notePreview.classList.remove("note-preview--sheet");
   notePreview.hidden = true;
   notePreview.innerHTML = "";
   notePreview.style.removeProperty("--note-preview-top");
+  notePreview.style.removeProperty("left");
+  notePreview.style.removeProperty("right");
   state.activeNoteNumber = null;
   state.pinnedNoteNumber = null;
   updateActiveNoteRefs();
