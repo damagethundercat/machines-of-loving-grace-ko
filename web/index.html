@@ -122,18 +122,29 @@
                 크게
               </button>
             </div>
-            <input
-              id="page-slider"
-              class="reader-progress"
-              type="range"
-              min="1"
-              max="1"
-              value="1"
-              step="1"
-              aria-label="페이지 빠른 이동"
-              aria-controls="reader"
-            >
-          </div>
+              <div class="reader-progress-track">
+                <input
+                  id="page-slider"
+                  class="reader-progress"
+                  type="range"
+                  min="1"
+                  max="1"
+                  value="1"
+                  step="1"
+                  aria-label="페이지 빠른 이동"
+                  aria-controls="reader"
+                >
+                <div class="reader-progress-visual" aria-hidden="true">
+                  <div class="reader-progress-bar"></div>
+                  <div class="reader-progress-thumb"></div>
+                </div>
+                <div
+                  id="page-slider-hitbox"
+                  class="reader-progress-hitbox"
+                  aria-hidden="true"
+                ></div>
+              </div>
+            </div>
         </div>
       </div>
     </div>

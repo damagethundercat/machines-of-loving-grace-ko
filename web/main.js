@@ -4,6 +4,8 @@ const pageTrack = document.getElementById("page-track");
 const contentsPanel = document.getElementById("contents-panel");
 const contentsHomeLink = document.getElementById("contents-home-link");
 const pageSlider = document.getElementById("page-slider");
+const pageSliderTrack = pageSlider?.closest(".reader-progress-track") ?? null;
+const pageSliderHitbox = document.getElementById("page-slider-hitbox");
 const pageCounter = document.getElementById("page-counter");
 const notePreview = document.getElementById("note-preview");
 const typeScaleControls = document.getElementById("type-scale-controls");
@@ -92,6 +94,7 @@ const state = {
   activeNoteNumber: null,
   pinnedNoteNumber: null,
   notePreviewHideTimer: 0,
+  sliderPointerId: null,
   typeScale: "medium",
   layoutUpdateRaf: 0,
   coverLayoutRaf: 0,
@@ -147,11 +150,14 @@ function installEventHandlers() {
   contentsPanel?.addEventListener("click", onContentsClick);
   contentsHomeLink?.addEventListener("click", onContentsHomeClick);
   pageSlider?.addEventListener("input", onPageSliderInput);
-  pageSlider?.addEventListener("pointerdown", onPageSliderPointerDown);
-  pageSlider?.addEventListener("pointerup", onPageSliderPointerUp);
-  pageSlider?.addEventListener("pointercancel", onPageSliderPointerUp);
-  pageSlider?.addEventListener("blur", onPageSliderPointerUp);
   pageSlider?.addEventListener("wheel", onPageSliderWheel, { passive: false });
+  pageSlider?.addEventListener("blur", onPageSliderPointerUp);
+  pageSliderHitbox?.addEventListener("pointerdown", onPageSliderPointerDown);
+  pageSliderHitbox?.addEventListener("pointermove", onPageSliderPointerMove);
+  pageSliderHitbox?.addEventListener("pointerup", onPageSliderPointerUp);
+  pageSliderHitbox?.addEventListener("pointercancel", onPageSliderPointerUp);
+  pageSliderHitbox?.addEventListener("lostpointercapture", onPageSliderPointerUp);
+  pageSliderHitbox?.addEventListener("wheel", onPageSliderWheel, { passive: false });
   notePreview?.addEventListener("pointerenter", onNotePreviewPointerEnter);
   notePreview?.addEventListener("pointerleave", onNotePreviewPointerLeave);
   notePreview?.addEventListener("mouseenter", onNotePreviewPointerEnter);
@@ -297,6 +303,7 @@ function onPageSliderInput(event) {
   }
 
   const fraction = getSliderFraction(target);
+  updateSliderVisual(fraction);
   if (!state.isSliderScrubbing) {
     const targetPage = Math.round(fraction * Math.max(state.pages.length - 1, 0));
     goToPage(targetPage, { behavior: "auto", updateHash: true });
@@ -308,22 +315,41 @@ function onPageSliderInput(event) {
 
 function onPageSliderPointerDown(event) {
   const target = event.currentTarget;
-  if (!(target instanceof HTMLInputElement)) {
+  if (!(target instanceof HTMLElement) || !(pageSlider instanceof HTMLInputElement)) {
     return;
   }
+  if (pageSlider.disabled) {
+    return;
+  }
+  event.preventDefault();
   clearPendingPageTurn();
   closeNotePreview();
   if (typeof target.setPointerCapture === "function") {
     target.setPointerCapture(event.pointerId);
   }
+  state.sliderPointerId = event.pointerId;
   state.isSliderScrubbing = true;
   reader.classList.add("is-slider-scrubbing");
   target.classList.add("is-dragging");
+  target.parentElement?.classList.add("is-dragging");
+  updateSliderFromPointer(event.clientX);
+}
+
+function onPageSliderPointerMove(event) {
+  const target = event.currentTarget;
+  if (!(target instanceof HTMLElement)) {
+    return;
+  }
+  if (!state.isSliderScrubbing || state.sliderPointerId !== event.pointerId) {
+    return;
+  }
+  event.preventDefault();
+  updateSliderFromPointer(event.clientX);
 }
 
 function onPageSliderPointerUp(event) {
   const target = event.currentTarget;
-  if (!(target instanceof HTMLInputElement)) {
+  if (!(target instanceof HTMLElement)) {
     return;
   }
   const pointerId = "pointerId" in event ? event.pointerId : null;
@@ -335,13 +361,21 @@ function onPageSliderPointerUp(event) {
     target.releasePointerCapture(pointerId);
   }
   target.classList.remove("is-dragging");
+  target.parentElement?.classList.remove("is-dragging");
   if (!state.isSliderScrubbing) {
+    return;
+  }
+  if (typeof pointerId === "number" && state.sliderPointerId != null && pointerId !== state.sliderPointerId) {
     return;
   }
 
   state.isSliderScrubbing = false;
+  state.sliderPointerId = null;
   reader.classList.remove("is-slider-scrubbing");
-  const targetPage = resolveNearestPageIndex();
+  const targetPage =
+    pageSlider instanceof HTMLInputElement
+      ? Math.round(getSliderFraction(pageSlider) * Math.max(state.pages.length - 1, 0))
+      : resolveNearestPageIndex();
   goToPage(targetPage, { behavior: "auto", updateHash: true });
 }
 
@@ -1274,7 +1308,9 @@ function updatePageSlider() {
   if (!state.isSliderScrubbing) {
     pageSlider.value = String(Math.round(state.currentPage * state.sliderScale));
   }
+  updateSliderVisual(getSliderFraction(pageSlider));
   pageSlider.disabled = pageCount <= 1;
+  pageSliderTrack?.classList.toggle("is-disabled", pageCount <= 1);
   updatePageCounter(pageCount);
 }
 
@@ -2046,6 +2082,29 @@ function getSliderFraction(slider) {
     return 0;
   }
   return clamp((value - min) / (max - min), 0, 1);
+}
+
+function updateSliderVisual(fraction) {
+  pageSliderTrack?.style.setProperty("--slider-progress", String(clamp(fraction, 0, 1)));
+}
+
+function updateSliderFromPointer(clientX) {
+  if (!(pageSlider instanceof HTMLInputElement) || !(pageSliderHitbox instanceof HTMLElement)) {
+    return;
+  }
+
+  const rect = pageSliderHitbox.getBoundingClientRect();
+  if (rect.width <= 0) {
+    return;
+  }
+
+  const fraction = clamp((clientX - rect.left) / rect.width, 0, 1);
+  const min = Number(pageSlider.min || 0);
+  const max = Number(pageSlider.max || 1);
+  const value = min + fraction * (max - min);
+  pageSlider.value = String(Math.round(value));
+  updateSliderVisual(fraction);
+  scrubReaderToFraction(fraction);
 }
 
 function scrubReaderToFraction(fraction) {
