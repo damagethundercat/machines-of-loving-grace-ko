@@ -1311,11 +1311,20 @@ function collectEndnotes(manuscript) {
 }
 
 function shouldUseInlineNotePreview() {
-  return window.innerWidth > 1000;
+  if (window.innerWidth <= 1000) {
+    return false;
+  }
+
+  const readerWidth = reader?.clientWidth || window.innerWidth;
+  const pageWidth = state.metrics?.pageWidth ?? Math.min(readerWidth, 760);
+  const availableSideRoom = Math.max(0, readerWidth - pageWidth);
+  const inlineNoteWidth = clamp(window.innerWidth * 0.18, 220, 288);
+
+  return availableSideRoom >= inlineNoteWidth + 72;
 }
 
 function shouldUseMobileNoteSheet() {
-  return window.innerWidth <= 1000;
+  return !shouldUseInlineNotePreview();
 }
 
 function tryToggleInlineNotePin(anchor, event) {
